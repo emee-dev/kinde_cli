@@ -1,0 +1,32 @@
+{
+	"compilerOptions": {
+		// "typeRoots": ["./src/@types/**/*", "./node_modules/@types"],
+		"target": "es6",
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"strict": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"noEmitOnError": true,
+		"skipDefaultLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"outDir": "dist",
+		"noImplicitAny": true
+		// "baseUrl": ".",
+		// "paths": {
+		//   "@api/*": ["src/api/*"],
+		//   "@constants/*": ["src/constants/*"],
+		//   "@interfaces/*": ["src/interfaces/*"],
+		//   "@services/*": ["src/services/*"],
+		//   "@utils/*": ["src/utils/*"],
+		//   "@helper/*": ["src/helper/*"],
+		//   "@model/*": ["src/model/*"]
+		// }
+	},
+	"include": ["src/**/*.ts"],
+	"exclude": ["node_modules"]
+	// "ts-node": {
+	//   "require": ["tsconfig-paths/register"]
+	// }
+}
