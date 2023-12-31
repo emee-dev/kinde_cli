@@ -2,29 +2,48 @@
 
 # <img src="https://avatars.githubusercontent.com/u/105711507?s=300&v=4" style="width:70px;padding-right:20px;margin-bottom:-8px;"> Kinde CLI
 
-Kinde is a
+Kinde is an alternative way of doing auth, kind of like clerk but better because it's been built with developers and startups in mind, save costs and achieve more free up 10,500 users. [Kinde](https://kinde.com)
 
 <!-- Find new badges at https://shields.io/badges -->
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![PyPI](https://img.shields.io/pypi/v/readme-template-cli)](https://pypi.org/project/readme-template-cli/)
+This CLI all the functionality for Kinde
 
-- This project contains templates you can use to write your own `README`, `CONTRIBUTING` and `PULL_REQUEST_TEMPLATE` files.
-- It also includes a CLI tool for using these files in your own projects.
-- Supports `pip` or `poetry` for dependency management.
+[x] Authentication & Access Token
+
+- [ ] Users
+  - [ ] Refresh User Claim
+  - [ ] Get User
+  - [ ] Create User
+  - [ ] Update User
+  - [ ] Delete User
+  - [ ] Update User Feature Flag
+- [x] Permissions
+  - [ ] List Permission
+  - [x] Create Permission
+  - [x] Update Permission
+  - [ ] Delete Permission
+- [x] Roles
+  - [ ] List Roles
+  - [x] Create Roles
+  - [x] Update Roles
+  - [ ] Delete Roles
 
 [![Demo of the Read Me template command line app. It shows the user inputting their GitHub username and a repository name to generate a set of customised files useful for sharing GitHub projects.](demo.gif)](https://raw.githubusercontent.com/Cutwell/readme-template/main/demo.gif)
 
-## Install
+## Getting Started
 
-```sh
-pip install readme-template-cli
+### Install the CLI
+
+Available on NPM. To install:
+
+```bash copy
+npm install kinde-cli
 ```
 
 ## Usage
 
-```sh
-readme [-h] [--test] [--force]
+```bash
+kinde-cli [-] [--test] [--force]
 ```
 
 |      Flag      |                                                      Description                                                      |

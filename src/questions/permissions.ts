@@ -21,7 +21,11 @@ class Permission {
 
 		program
 			.command("permission")
-			.description(colors.blue("to manage organization's permissions"))
+			.description(
+				colors.blue(
+					"Manage User Permissions. For more information, refer to: https://kinde.com/docs/user-management/user-permissions/"
+				)
+			)
 			.option(
 				"-c, --create <name>",
 				"create permission",

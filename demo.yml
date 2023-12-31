@@ -1,0 +1,231 @@
+# The configurations that used for the recording, feel free to edit them
+config:
+
+  # Specify a command to be executed
+  # like `/bin/bash -l`, `ls`, or any other commands
+  # the default is bash for Linux
+  # or powershell.exe for Windows
+  command: powershell.exe
+  
+  # Specify the current working directory path
+  # the default is the current working directory path
+  cwd: C:\Users\USER\Desktop\Kinde Cli
+  
+  # Export additional ENV variables
+  env:
+    recording: true
+  
+  # Explicitly set the number of columns
+  # or use `auto` to take the current
+  # number of columns of your shell
+  cols: 150
+  
+  # Explicitly set the number of rows
+  # or use `auto` to take the current
+  # number of rows of your shell
+  rows: 13
+  
+  # Amount of times to repeat GIF
+  # If value is -1, play once
+  # If value is 0, loop indefinitely
+  # If value is a positive number, loop n times
+  repeat: 0
+  
+  # Quality
+  # 1 - 100
+  quality: 100
+  
+  # Delay between frames in ms
+  # If the value is `auto` use the actual recording delays
+  frameDelay: auto
+  
+  # Maximum delay between frames in ms
+  # Ignored if the `frameDelay` isn't set to `auto`
+  # Set to `auto` to prevent limiting the max idle time
+  maxIdleTime: 2000
+  
+  # The surrounding frame box
+  # The `type` can be null, window, floating, or solid`
+  # To hide the title use the value null
+  # Don't forget to add a backgroundColor style with a null as type
+  frameBox:
+    type: floating
+    title: Terminalizer
+    style:
+      border: 0px black solid
+      # boxShadow: none
+      # margin: 0px
+  
+  # Add a watermark image to the rendered gif
+  # You need to specify an absolute path for
+  # the image on your machine or a URL, and you can also
+  # add your own CSS styles
+  watermark:
+    imagePath: null
+    style:
+      position: absolute
+      right: 15px
+      bottom: 15px
+      width: 100px
+      opacity: 0.9
+  
+  # Cursor style can be one of
+  # `block`, `underline`, or `bar`
+  cursorStyle: block
+  
+  # Font family
+  # You can use any font that is installed on your machine
+  # in CSS-like syntax
+  fontFamily: "Monaco, Lucida Console, Ubuntu Mono, Monospace"
+  
+  # The size of the font
+  fontSize: 12
+  
+  # The height of lines
+  lineHeight: 1
+  
+  # The spacing between letters
+  letterSpacing: 0
+  
+  # Theme
+  theme:
+    background: "transparent"
+    foreground: "#afafaf"
+    cursor: "#c7c7c7"
+    black: "#232628"
+    red: "#fc4384"
+    green: "#b3e33b"
+    yellow: "#ffa727"
+    blue: "#75dff2"
+    magenta: "#ae89fe"
+    cyan: "#708387"
+    white: "#d5d5d0"
+    brightBlack: "#626566"
+    brightRed: "#ff7fac"
+    brightGreen: "#c8ed71"
+    brightYellow: "#ebdf86"
+    brightBlue: "#75dff2"
+    brightMagenta: "#ae89fe"
+    brightCyan: "#b1c6ca"
+    brightWhite: "#f9f9f4"
+  
+# Records, feel free to edit them
+records:
+  - delay: 2443
+    content: "\e[2J\e[?25l\e[m\e[H\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\e[H\e]0;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\a\e[?25h"
+  - delay: 6
+    content: "\e[?25lWindows PowerShell\e[42X\e[42C\r\nCopyright (C) Microsoft Corporation. All rights reserved.   \r\n\e[60X\e[60C\r\nTry the new cross-platform PowerShell https://aka.ms/pscore6\e[6;1H\e]0;Administrator: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\a\e[?25h"
+  - delay: 403
+    content: "\e[?25lPS C:\\Users\\USER\\Desktop\\Kinde Cli> \e[?25h"
+  - delay: 1143
+    content: "\e[?25l\e[?25h"
+  - delay: 10
+    content: "\e[93mp"
+  - delay: 276
+    content: "\e[?25l\e[m\e[?25h"
+  - delay: 10
+    content: "\e[?25l\e[93m\bpn\e[?25h"
+  - delay: 200
+    content: "\e[?25l\e[m\e[?25h"
+  - delay: 9
+    content: "\e[?25l\e[93m\e[6;37Hpnp\e[?25h"
+  - delay: 223
+    content: "\e[?25l\e[m\e[?25h"
+  - delay: 9
+    content: "\e[?25l\e[93m\e[6;37Hpnpm\e[?25h"
+  - delay: 177
+    content: "\e[?25l\e[m\e[?25h"
+  - delay: 8
+    content: "\e[?25l\e[93m\e[6;37Hpnpm\e[m \e[?25h"
+  - delay: 301
+    content: "\e[?25l\e[?25h"
+  - delay: 9
+    content: "\e[?25l\e[93m\e[6;37Hpnpm\e[m s\e[?25h"
+  - delay: 268
+    content: "\e[?25l\e[?25h"
+  - delay: 9
+    content: "\e[?25l\e[93m\e[6;37Hpnpm\e[m st\e[?25h"
+  - delay: 157
+    content: "\e[?25l\e[?25h"
+  - delay: 9
+    content: "\e[?25l\e[93m\e[6;37Hpnpm\e[m sta\e[?25h"
+  - delay: 128
+    content: "\e[?25l\e[?25h"
+  - delay: 9
+    content: "\e[?25l\e[93m\e[6;37Hpnpm\e[m star\e[?25h"
+  - delay: 184
+    content: "\e[?25l\e[?25h"
+  - delay: 9
+    content: "\e[?25l\e[93m\e[6;37Hpnpm\e[m start\e[?25h"
+  - delay: 274
+    content: "\e[?25l\e[?25h"
+  - delay: 8
+    content: "\e[?25l\e[93m\e[6;37Hpnpm\e[m start \e[?25h"
+  - delay: 4739
+    content: "\e[?25l\e[?25h"
+  - delay: 10
+    content: "\e[?25l\e[93m\e[6;37Hpnpm\e[m start \e[90m-\e[?25h"
+  - delay: 157
+    content: "\e[?25l\e[m\e[?25h"
+  - delay: 9
+    content: "\e[?25l\e[93m\e[6;37Hpnpm\e[m start \e[90m--\e[?25h"
+  - delay: 341
+    content: "\e[?25l\e[m\e[?25h"
+  - delay: 10
+    content: "\e[?25l\e[93m\e[6;37Hpnpm\e[m start \e[90m--h\e[?25h"
+  - delay: 112
+    content: "\e[?25l\e[m\e[?25h"
+  - delay: 10
+    content: "\e[?25l\e[93m\e[6;37Hpnpm\e[m start \e[90m--he\e[?25h"
+  - delay: 211
+    content: "\e[?25l\e[m\e[?25h"
+  - delay: 10
+    content: "\e[?25l\e[93m\e[6;37Hpnpm\e[m start \e[90m--hep\e[?25h"
+  - delay: 598
+    content: "\e[?25l\e[m\e[?25h"
+  - delay: 10
+    content: "\e[?25l\e[93m\e[6;37Hpnpm\e[m start \e[90m--he\e[m \b\e[?25h"
+  - delay: 301
+    content: "\e[?25l\e[?25h"
+  - delay: 10
+    content: "\e[?25l\e[93m\e[6;37Hpnpm\e[m start \e[90m--hel\e[?25h"
+  - delay: 183
+    content: "\e[?25l\e[m\e[?25h"
+  - delay: 10
+    content: "\e[?25l\e[93m\e[6;37Hpnpm\e[m start \e[90m--help\e[?25h"
+  - delay: 304
+    content: "\e[?25l\e[m\r\n\e[?25h"
+  - delay: 196
+    content: "\e[?25l\e[HWindows PowerShell\e[132X\e[132C\r\nCopyright (C) Microsoft Corporation. All rights reserved.\e[93X\e[93C\r\n\e[150X\e[150C\r\nTry the new cross-platform PowerShell https://aka.ms/pscore6\e[90X\e[90C\r\n\e[150X\e[150C\r\nPS C:\\Users\\USER\\Desktop\\Kinde Cli> \e[93mpnpm\e[m start \e[90m--help\e[m\e[97X\e[97C\r\n\e[150X\e[150C\r\n\e[150X\e[150C\r\n\e[150X\e[150C\r\n\e[150X\e[150C\r\n\e[150X\e[150C\r\n\e[150X\e[150C\r\n\e[150X\e[150C\e[7;1H\e[?25h"
+  - delay: 987
+    content: "\e[?25l\e[HWindows PowerShell\e[132X\e[132C\r\nCopyright (C) Microsoft Corporation. All rights reserved.\e[93X\e[93C\r\n\e[150X\e[150C\r\nTry the new cross-platform PowerShell https://aka.ms/pscore6\e[90X\e[90C\r\n\e[150X\e[150C\r\nPS C:\\Users\\USER\\Desktop\\Kinde Cli> \e[93mpnpm\e[m start \e[90m--help\e[m\e[97X\e[97C\r\n\e[150X\e[150C\r\n\e[150X\e[150C\r\n\e[150X\e[150C\r\n\e[150X\e[150C\r\n\e[150X\e[150C\r\n\e[150X\e[150C\r\n\e[150X\e[150C\e[7;1H\e[?25h"
+  - delay: 1313
+    content: "\e[?25l\r\n> Kinde Cli@1.0.0 start C:\\Users\\USER\\Desktop\\Kinde Cli\r\n> ts-node ./src/index.ts \"--help\"\e[22X\e[22C\e[11;1H\e[?25h"
+  - delay: 50
+    content: "\e[?25l\e[HWindows PowerShell\e[132X\e[132C\r\nCopyright (C) Microsoft Corporation. All rights reserved.\e[93X\e[93C\r\n\e[150X\e[150C\r\nTry the new cross-platform PowerShell https://aka.ms/pscore6\e[90X\e[90C\r\n\e[150X\e[150C\r\nPS C:\\Users\\USER\\Desktop\\Kinde Cli> \e[93mpnpm\e[m start \e[90m--help\e[m\e[97X\e[97C\r\n\e[150X\e[150C\r\n> Kinde Cli@1.0.0 start C:\\Users\\USER\\Desktop\\Kinde Cli\e[95X\e[95C\r\n> ts-node ./src/index.ts \"--help\"\e[117X\e[117C\r\n\e[150X\e[150C\r\n\e[150X\e[150C\r\n\e[150X\e[150C\r\n\e[150X\e[150C\e[11;1H\e[?25h"
+  - delay: 7
+    content: "\e[?25l\e[HWindows PowerShell\e[132X\e[132C\r\nCopyright (C) Microsoft Corporation. All rights reserved.\e[93X\e[93C\r\n\e[150X\e[150C\r\nTry the new cross-platform PowerShell https://aka.ms/pscore6\e[90X\e[90C\r\n\e[150X\e[150C\r\nPS C:\\Users\\USER\\Desktop\\Kinde Cli> \e[93mpnpm\e[m start \e[90m--help\e[m\e[97X\e[97C\r\n\e[150X\e[150C\r\n> Kinde Cli@1.0.0 start C:\\Users\\USER\\Desktop\\Kinde Cli\e[95X\e[95C\r\n> ts-node ./src/index.ts \"--help\"\e[117X\e[117C\r\n\e[150X\e[150C\r\n\e[150X\e[150C\r\n\e[150X\e[150C\r\n\e[150X\e[150C\e[11;1H\e[?25h"
+  - delay: 8412
+    content: "\e[?25lUsage: kinde-cli [options] [command]\e[13X\e[13C\r\n\e[49X\e[49C\r\nA cli to manage your Kinde projects and workspace\r\e[?25h\e[?25l\n\e[150X\e[150C\r\e[?25h\e[?25l\nOptions:\e[142X\e[142C\r\e[?25h\e[?25l\n  --v                   version\e[119X\e[119C\r\e[?25h\e[?25l\n  -V, --version         output the version number\e[101X\e[101C\r\e[?25h\e[?25l\n  -h, --help            display help for command\e[102X\e[102C\r\e[?25h\e[?25l\n\e[150X\e[150C\r\e[?25h\e[?25l\nCommands:\e[141X\e[141C\r\e[?25h\e[?25l\e[34m\n\e[m  login\e[17X\e[17C\e[34mObtain authentication to use this CLI. Requirements include the Business Domain Client Id and Client Secret. For more\e[m\e[9X\e[9C\r\e[?25h\e[?25l\n\e[34m                        information, refer to: https://kinde.com/docs/build/get-access-token-for-connecting-securely-to-kindes-api/\e[19X\e[19C\r\e[?25h\e[?25l\e[m\n  permission [options]  \e[34mManage User Permissions. For more information, refer to: https://kinde.com/docs/user-management/user-permissions/\e[m\e[13X\e[13C\r\e[?25h\e[?25l\n  help [command]        display help for command\e[102X\e[102C\r\e[?25h\e[?25l\n\e[150X\e[150C\r\e[?25h"
+  - delay: 177
+    content: "\e[?25lPS C:\\Users\\USER\\Desktop\\Kinde Cli> \e[?25h"
+  - delay: 1807
+    content: "\e[?25l\e[?25h"
+  - delay: 9
+    content: "\e[93me"
+  - delay: 240
+    content: "\e[?25l\e[m\e[?25h"
+  - delay: 9
+    content: "\e[?25l\e[93m\bex\e[?25h"
+  - delay: 163
+    content: "\e[?25l\e[m\e[?25h"
+  - delay: 10
+    content: "\e[?25l\e[93m\e[13;37Hexi\e[?25h"
+  - delay: 269
+    content: "\e[?25l\e[m\e[?25h"
+  - delay: 9
+    content: "\e[?25l\e[92m\e[13;37Hexit\e[?25h"
+  - delay: 737
+    content: "\e[?25l\e[m\e[H\e[150X\e[150C\r\nOptions:\e[142X\e[142C\r\n  --v                   version\e[119X\e[119C\r\n  -V, --version         output the version number\e[101X\e[101C\r\n  -h, --help            display help for command\e[102X\e[102C\r\n\e[150X\e[150C\r\nCommands:\e[141X\e[141C\r\n  login\e[17X\e[17C\e[34mObtain authentication to use this CLI. Requirements include the Business Domain Client Id and Client Secret. For more\e[m\e[9X\e[9C\e[34m\r\n                        information, refer to: https://kinde.com/docs/build/get-access-token-for-connecting-securely-to-kindes-api/\e[19X\e[19C\e[m\r\n  permission [options]  \e[34mManage User Permissions. For more information, refer to: https://kinde.com/docs/user-management/user-permissions/\e[m\e[13X\e[13C\r\n  help [command]        display help for command\e[102X\e[102C\r\nPS C:\\Users\\USER\\Desktop\\Kinde Cli> \e[92mexit\e[m\e[110X\e[110C\r\n\e[150X\e[150C\e[13;41H\e[?25h"
+  - delay: 6
+    content: "\e[?25l\r\e[?25h"
