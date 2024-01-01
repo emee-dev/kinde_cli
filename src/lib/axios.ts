@@ -25,7 +25,7 @@ export const axiosRequest = async ({
 		let domain = ""; // "https://gettuition.kinde.com/api".split("/api")[0]
 
 		let response = await axios.request({
-			url: `${domain}${path}`,
+			url: path,
 			method,
 			headers,
 			data,

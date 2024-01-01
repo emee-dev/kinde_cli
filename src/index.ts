@@ -18,6 +18,7 @@ import Permission from "./questions/permissions";
 
 import axios from "axios";
 import Authentication from "./questions/auth";
+import Context from "./lib/context";
 
 // // intro(`Kinde Auth, easy drop in auth for your needs`);
 
@@ -64,6 +65,7 @@ program
 	.option("--v", "version")
 	.description("A cli to manage your Kinde projects and workspace")
 	.version(packageJson.version);
+
 
 new Authentication(program);
 new Permission(program);

@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";
+import { AccessTokenConfig } from "../questions/auth";
 
 const rootDirectoryPath = () => {
 	let dirName = ".kinde";
@@ -47,7 +48,7 @@ export async function readGlobalConfig() {
 			});
 		});
 
-		return configFile;
+		return configFile as AccessTokenConfig;
 	} catch (err) {
 		return null;
 	}

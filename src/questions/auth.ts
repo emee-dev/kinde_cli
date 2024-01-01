@@ -5,6 +5,7 @@ import qs from "qs";
 import { axiosRequest } from "../lib/axios";
 import { generateMessage } from "../utils/index";
 import { createRootDirectory, writeGlobalConfig } from "../utils/storage";
+import Context from "../lib/context";
 /* 
 /oauth2/token
 client_id: "",
@@ -64,7 +65,7 @@ let env = process.env.NODE_ENV;
 // 	}
 // };
 
-interface GenerateAccessToken {
+export interface AccessTokenConfig {
 	domain: string;
 	client_id: string;
 	client_secret: string;
@@ -138,7 +139,7 @@ class Authentication {
 		domain,
 		client_id,
 		client_secret,
-	}: GenerateAccessToken) {
+	}: AccessTokenConfig) {
 		let params = qs.stringify({
 			grant_type: "client_credentials",
 			client_id,
@@ -154,14 +155,26 @@ class Authentication {
 		let directoryCreated = await createRootDirectory();
 
 		// TODO refactor later
-		if (directoryCreated) {
+		if (!directoryCreated) {
 			return;
 		}
 
 		let configCreated = await writeGlobalConfig(data);
 
+		// TODO refactor later
+		if (!configCreated) {
+			return;
+		}
+
+		// "https://gettuition.kinde.com/api" => ['https://gettuition.kinde.com/', '']
+		let stripApi = domain.split("/api")[0];
+
+		// TODO store data in memory avoid numerous fs operations
+		// In memory storage for easy config fetching
+		Context.getData();
+
 		let accessToken = (await axiosRequest({
-			path: "/oauth2/token",
+			path: stripApi + "/oauth2/token",
 			method: "POST",
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded",
