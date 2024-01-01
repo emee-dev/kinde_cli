@@ -24,7 +24,7 @@
 		//   "@model/*": ["src/model/*"]
 		// }
 	},
-	"include": ["src/**/*.ts"],
+	"include": ["src/**/*.ts", "src/remove.ts"],
 	"exclude": ["node_modules"]
 	// "ts-node": {
 	//   "require": ["tsconfig-paths/register"]

@@ -1,10 +1,10 @@
 import { group, text } from "@clack/prompts";
-import axios from "axios";
-import qs from "qs";
-import { generateMessage } from "../utils";
 import { Command } from "commander";
 import colors from "picocolors";
+import qs from "qs";
 import { axiosRequest } from "../lib/axios";
+import { generateMessage } from "../utils/index";
+import { createRootDirectory, writeGlobalConfig } from "../utils/storage";
 /* 
 /oauth2/token
 client_id: "",
@@ -96,6 +96,7 @@ class Authentication {
 				const args = options.opts() as {};
 
 				let data = await this.__getAuthenticationArguments();
+
 				console.log(data);
 			});
 	}
@@ -144,7 +145,22 @@ class Authentication {
 			client_secret,
 		});
 
-		let data = (await axiosRequest({
+		let data = {
+			domain,
+			client_id,
+			client_secret,
+		};
+
+		let directoryCreated = await createRootDirectory();
+
+		// TODO refactor later
+		if (directoryCreated) {
+			return;
+		}
+
+		let configCreated = await writeGlobalConfig(data);
+
+		let accessToken = (await axiosRequest({
 			path: "/oauth2/token",
 			method: "POST",
 			headers: {
@@ -154,60 +170,6 @@ class Authentication {
 			data: params,
 		})) as AccessTokenResponse;
 	}
-	// private async __updatePermissionArguments() {
-	// 	let values = await group({
-	// 		permissionId: () =>
-	// 			text({
-	// 				message: generateMessage({
-	// 					key: "Id",
-	// 					desc: "permission's id",
-	// 					attr: "required",
-	// 				}),
-
-	// 				validate(value) {
-	// 					if (!value) return "id is required";
-	// 				},
-	// 			}),
-	// 		key: () =>
-	// 			text({
-	// 				message: generateMessage({
-	// 					key: "Key",
-	// 					desc: "identifier to use in code",
-	// 					attr: "optional",
-	// 				}),
-	// 				defaultValue: undefined,
-	// 			}),
-	// 		name: () =>
-	// 			text({
-	// 				message: generateMessage({
-	// 					key: "Name",
-	// 					desc: "Permission's name",
-	// 					attr: "optional",
-	// 				}),
-	// 				defaultValue: undefined,
-	// 			}),
-	// 		description: () =>
-	// 			text({
-	// 				message: generateMessage({
-	// 					key: "Description",
-	// 					desc: "Permission's description",
-	// 					attr: "optional",
-	// 				}),
-	// 				defaultValue: undefined,
-	// 			}),
-	// 		body: () =>
-	// 			text({
-	// 				message: generateMessage({
-	// 					key: "Body:",
-	// 					desc: "Permission's details",
-	// 					attr: "optional",
-	// 				}),
-	// 				defaultValue: undefined,
-	// 			}),
-	// 	});
-
-	// 	return values;
-	// }
 }
 
 export default Authentication;

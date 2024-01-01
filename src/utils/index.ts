@@ -1,5 +1,7 @@
 import colors from "picocolors";
 
+
+
 export const removeOptionalNullProperties = (obj: Record<string, unknown>) => {
 	let temp = {} as typeof obj;
 	for (let property in obj) {
@@ -22,3 +24,5 @@ export const generateMessage = ({ key, desc, attr }: GenerateMessage) =>
 		`[${attr}]`
 	)}`;
 // `${key} ${colors.blue(`${desc}`)} ${colors.green(`${attr}`)}`;
+
+

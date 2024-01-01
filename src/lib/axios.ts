@@ -30,6 +30,7 @@ export const axiosRequest = async ({
 			headers,
 			data,
 		});
+
 		return response.data;
 	} catch (err: unknown) {
 		return err;
