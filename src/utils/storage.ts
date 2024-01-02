@@ -3,7 +3,7 @@ import path from "node:path";
 import os from "node:os";
 import { AccessTokenConfig } from "../questions/auth";
 
-const rootDirectoryPath = () => {
+export const rootDirectoryPath = () => {
 	let dirName = ".kinde";
 	let rootDirectory = path.join(os.homedir(), dirName);
 	return rootDirectory;
@@ -11,6 +11,14 @@ const rootDirectoryPath = () => {
 
 async function getGlobalConfigPath() {
 	return path.join(rootDirectoryPath(), "config.json");
+}
+
+export function isValidPath(path: string) {
+	if (fs.existsSync(path)) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 export async function createRootDirectory() {
@@ -54,18 +62,18 @@ export async function readGlobalConfig() {
 	}
 }
 
-export async function writeGlobalConfig(data: Record<string, unknown>) {
+export async function writeGlobalConfig<T>(data: T) {
 	try {
-		let rootDirectory = await createRootDirectory();
+		let rootDirectory = rootDirectoryPath();
 
-		// Does Directory already exist
-		if (rootDirectory) {
-			return null;
-		}
+		// // Does Directory already exist
+		// if (rootDirectory) {
+		// 	return null;
+		// }
 
 		let config = await new Promise<boolean>((resolve, reject) => {
 			fs.writeFile(
-				path.join(rootDirectory as string, "config.json"),
+				path.join(rootDirectory, "config.json"),
 				JSON.stringify(data),
 				{ encoding: "utf-8" },
 				(err) => {

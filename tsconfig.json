@@ -15,18 +15,12 @@
 		"noImplicitAny": true
 		// "baseUrl": ".",
 		// "paths": {
-		//   "@api/*": ["src/api/*"],
-		//   "@constants/*": ["src/constants/*"],
-		//   "@interfaces/*": ["src/interfaces/*"],
-		//   "@services/*": ["src/services/*"],
+		//   "@./*": ["src/*"],
+		//   "@lib/*": ["src/lib/*"],
+		//   "@questions/*": ["src/questions/*"],
 		//   "@utils/*": ["src/utils/*"],
-		//   "@helper/*": ["src/helper/*"],
-		//   "@model/*": ["src/model/*"]
 		// }
 	},
 	"include": ["src/**/*.ts", "src/remove.ts"],
 	"exclude": ["node_modules"]
-	// "ts-node": {
-	//   "require": ["tsconfig-paths/register"]
-	// }
 }

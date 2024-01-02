@@ -33,6 +33,6 @@ export const axiosRequest = async ({
 
 		return response.data;
 	} catch (err: unknown) {
-		return err;
+		return null;
 	}
 };

@@ -19,6 +19,7 @@ import Permission from "./questions/permissions";
 import axios from "axios";
 import Authentication from "./questions/auth";
 import Context from "./lib/context";
+import { createRootDirectory } from "./utils/storage";
 
 // // intro(`Kinde Auth, easy drop in auth for your needs`);
 
@@ -57,7 +58,7 @@ import Context from "./lib/context";
 // // }
 
 // // Run();
-
+createRootDirectory().then((d) => console.log("Root Directory Created at:", d));
 const program = new Command();
 
 program
@@ -65,7 +66,6 @@ program
 	.option("--v", "version")
 	.description("A cli to manage your Kinde projects and workspace")
 	.version(packageJson.version);
-
 
 new Authentication(program);
 new Permission(program);

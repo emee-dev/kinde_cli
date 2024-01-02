@@ -1,74 +1,36 @@
-import { group, text } from "@clack/prompts";
+import { group, spinner as clarkSpinner, text } from "@clack/prompts";
 import { Command } from "commander";
 import colors from "picocolors";
 import qs from "qs";
 import { axiosRequest } from "../lib/axios";
-import { generateMessage } from "../utils/index";
-import { createRootDirectory, writeGlobalConfig } from "../utils/storage";
+import { extractUrlWithoutApi, generateMessage } from "../utils/index";
+import {
+	createRootDirectory,
+	isValidPath,
+	rootDirectoryPath,
+	writeGlobalConfig,
+} from "../utils/storage";
 import Context from "../lib/context";
+
+const spinner = clarkSpinner();
 /* 
 /oauth2/token
 client_id: "",
 client_secret: ""
 personaldomain: ""
 
-//response
-{
-  access_token: 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImNmOjdjOmNhOjI0OjUwOjVmOmE2OmNhOjc2OjIzOjU1OjMxOjUyOmFkOjY2OmFkIiwidHlwIjoiSldUIn0.eyJhdWQiOltdLCJhenAiOiIwZDRlNWFmZTc5Njk0NWQ3YTBjZmQzZTdjZmVjZDQxZSIsImV4cCI6MTcwNDA1OTU5MSwiZ3R5IjpbImNsaWVudF9jcmVkZW50aWFscyJdLCJpYXQiOjE3MDM5NzMxOTEsImlzcyI6Imh0dHBzOi8vZ2V0dHVpdGlvbi5raW5kZS5jb20iLCJqdGkiOiI5NWNjNGRiZC03YWJkLTQyMjgtYmQwNi1hOTZlMmE4ZWVlODEiLCJzY3AiOltdfQ.4pf-9ECGRfz-Zp7wuOaqJTP1NG4fH8wNI3ilwxEbr1AXNIAFiGOuaidZ8MzygXNmn7MNV8KEpBns2c6oLH_v_gmQqGAHgaVHPKrUfHbC3Lgplxj7_hMZeBtG3STo439hIkMfHnBWsQPkGnxcLYze1ekVCRsyKRl38X-Luxd4Gn_kQOfHGhyiVSdDhaSBQtd3APHXzHYmEO1rWdEmeB_iQ0uIGDqsvoKcz1VKqnOO8cxp6v5JsvowP91poIbMs3m0__vpaLvT7CIn-vD91JY2aaXS9A3LrhaKSOMFpiw5RgUrXEN7Y0GClcNcXd4r6-Jb_UaSGIfnZoCn2W2i0eHlSw',
-  expires_in: 86399,
-  scope: '',
-  token_type: 'bearer'
-}
+// Before login request clientSecret
+
+ 
+
 */
 
 let env = process.env.NODE_ENV;
 
-// export const authenticationQuestion = {
-// 	clientId: () =>
-// 		text({
-// 			message: "ClientId: (Application ClientId) [required]",
-// 			defaultValue: env === "development" ? "TEST_CLIENT_ID" : "",
-// 		}),
-
-// 	clientSecret: () =>
-// 		text({
-// 			message: "ClientSecret: (Application Client Secret) [required]",
-// 			defaultValue: env === "development" ? "TEST_SECRET" : "",
-// 		}),
-// 	personalDomain: () =>
-// 		text({
-// 			message: "Domain: (Enter your kinde's business domain) [required]",
-// 			placeholder: "(https://<businessName>.kinde.com)",
-// 		}),
-// };
-
-// export const handleAuthenticationProcess = async () => {
-// 	try {
-// 		let params = qs.stringify({
-// 			// required
-// 			grant_type: "client_credentials",
-// 			client_id: "",
-// 			client_secret: "",
-// 		});
-// 		let data = await axios.request({
-// 			url: "https://gettuition.kinde.com/oauth2/token",
-// 			method: "POST",
-// 			headers: {
-// 				"Content-Type": "application/x-www-form-urlencoded",
-// 				Accept: "application/json",
-// 			},
-// 			data: params,
-// 		});
-// 		console.log(data.data);
-// 	} catch (err: any) {
-// 		console.log(err.message);
-// 	}
-// };
-
 export interface AccessTokenConfig {
 	domain: string;
-	client_id: string;
-	client_secret: string;
+	clientId: string;
+	clientSecret: string;
 }
 
 interface AccessTokenResponse {
@@ -76,6 +38,18 @@ interface AccessTokenResponse {
 	expires_in: number;
 	scope: string;
 	token_type: string;
+}
+
+interface ConfigData {
+	clientId: string;
+	normalDomain: string;
+	personalDomainNoApiEndingPath: string;
+	accessToken: {
+		access_token: string;
+		expires_in: number;
+		scope: string;
+		token_type: string;
+	};
 }
 
 class Authentication {
@@ -98,13 +72,13 @@ class Authentication {
 
 				let data = await this.__getAuthenticationArguments();
 
-				console.log(data);
+				await this.__generateAccessToken(data);
 			});
 	}
 
 	private async __getAuthenticationArguments() {
 		let values = await group({
-			businessDomain: () =>
+			domain: () =>
 				text({
 					message: generateMessage({
 						key: "Domain",
@@ -112,6 +86,9 @@ class Authentication {
 						attr: "required",
 					}),
 					defaultValue: undefined,
+					validate(value) {
+						if (!value) return "Business domain is required!!";
+					},
 				}),
 			clientId: () =>
 				text({
@@ -121,6 +98,9 @@ class Authentication {
 						attr: "required",
 					}),
 					defaultValue: undefined,
+					validate(value) {
+						if (!value) return "Client Id is required!!";
+					},
 				}),
 			clientSecret: () =>
 				text({
@@ -130,6 +110,9 @@ class Authentication {
 						attr: "required",
 					}),
 					defaultValue: undefined,
+					validate(value) {
+						if (!value) return "Client Secret is required!!";
+					},
 				}),
 		});
 		return values;
@@ -137,51 +120,61 @@ class Authentication {
 
 	private async __generateAccessToken({
 		domain,
-		client_id,
-		client_secret,
+		clientId,
+		clientSecret,
 	}: AccessTokenConfig) {
-		let params = qs.stringify({
+		let strippedApiEndpoint = extractUrlWithoutApi(domain);
+
+		// URL Encoded Params
+		let payload = qs.stringify({
 			grant_type: "client_credentials",
-			client_id,
-			client_secret,
+			client_id: clientId,
+			client_secret: clientSecret,
+			audience: strippedApiEndpoint,
 		});
 
-		let data = {
-			domain,
-			client_id,
-			client_secret,
-		};
+		let doesRootPathExist = isValidPath(rootDirectoryPath());
 
-		let directoryCreated = await createRootDirectory();
-
-		// TODO refactor later
-		if (!directoryCreated) {
+		if (!doesRootPathExist) {
 			return;
 		}
 
-		let configCreated = await writeGlobalConfig(data);
-
-		// TODO refactor later
-		if (!configCreated) {
-			return;
-		}
-
-		// "https://gettuition.kinde.com/api" => ['https://gettuition.kinde.com/', '']
-		let stripApi = domain.split("/api")[0];
-
-		// TODO store data in memory avoid numerous fs operations
-		// In memory storage for easy config fetching
-		Context.getData();
-
+		spinner.start("Authenticating, please wait...");
 		let accessToken = (await axiosRequest({
-			path: stripApi + "/oauth2/token",
+			path: strippedApiEndpoint + "/oauth2/token",
 			method: "POST",
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded",
 				Accept: "application/json",
 			},
-			data: params,
+			data: payload,
 		})) as AccessTokenResponse;
+
+		if (!accessToken) {
+			spinner.stop("Error authenticating user, please try again", 400);
+			return;
+		}
+		spinner.stop("Authentication success, please hold on...");
+
+		let configData = {
+			clientId,
+			normalDomain: domain,
+			personalDomainNoApiEndingPath: strippedApiEndpoint as string,
+			accessToken: accessToken,
+		};
+
+		// Hold lifetime data in memory
+		Context.setData(configData);
+
+		spinner.start("Hold on writing config data...");
+		let configCreated = await writeGlobalConfig<ConfigData>(configData);
+
+		if (!configCreated) {
+			spinner.stop("Config could not be saved", 400);
+			return;
+		}
+
+		spinner.stop("Config was saved sucessfully...");
 	}
 }
 
