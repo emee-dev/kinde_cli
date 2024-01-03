@@ -22,6 +22,15 @@
 		"authorization",
 		"auth"
 	],
+	"homepage": "https://kinde.com",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/emee-dev/kinde_cli"
+	},
+	"files": [
+		"dist/**/*",
+		"package.json"
+	],
 	"author": "Emmanuel Ajike",
 	"license": "ISC",
 	"dependencies": {

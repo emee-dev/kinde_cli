@@ -30,7 +30,7 @@ This CLI some of the functionality for Kinde:
 
 ## Getting Started
 
-On your Kinde dashboard, create a new application call it CLI for convienience and choose Machine to Machine (M2M) option then click save to continue and then tab on the left click on API(s) then enable the api to connect this application to; copy your domain, client id and client secret you will need this to login.
+On your Kinde dashboard, create a new application call it CLI for convenience and choose Machine to Machine (M2M) option then click save to continue and then tab on the left click on API(s) then enable the api to connect this application to; copy your domain, client id and client secret you will need this to login.
 
 ![Applications view](./temp/applications.png)
 ![Add New M2M Application](./temp/add_application.png)
