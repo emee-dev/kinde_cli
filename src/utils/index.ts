@@ -1,5 +1,11 @@
 import colors from "picocolors";
 
+interface GenerateMessage {
+	key: `${string}`;
+	desc: `${string}`;
+	attr: "optional" | "required";
+}
+
 export const removeOptionalNullProperties = (obj: Record<string, unknown>) => {
 	let temp = {} as typeof obj;
 	for (let property in obj) {
@@ -12,16 +18,10 @@ export const removeOptionalNullProperties = (obj: Record<string, unknown>) => {
 	return temp;
 };
 
-interface GenerateMessage {
-	key: `${string}`;
-	desc: `${string}`;
-	attr: "optional" | "required";
-}
 export const generateMessage = ({ key, desc, attr }: GenerateMessage) =>
 	`${colors.green(`${key}:`)} ${colors.blue(`(${desc})`)} ${colors.green(
 		`[${attr}]`
 	)}`;
-// `${key} ${colors.blue(`${desc}`)} ${colors.green(`${attr}`)}`;
 
 /**
  * Strips the api ending portion of the endpoint

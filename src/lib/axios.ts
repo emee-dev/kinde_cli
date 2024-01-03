@@ -2,7 +2,6 @@ import axios from "axios";
 
 interface AxiosRequest {
 	path: string;
-	// domain: string;
 	method: "POST" | "GET" | "PATCH" | "DELETE";
 	headers: {
 		Accept: "application/json";
@@ -12,8 +11,6 @@ interface AxiosRequest {
 	data?: unknown;
 }
 
-let PERSONAL_KINDE_DOMAIN = "";
-
 export const axiosRequest = async ({
 	path,
 	method,
@@ -21,9 +18,6 @@ export const axiosRequest = async ({
 	data,
 }: AxiosRequest) => {
 	try {
-		// Get this from local storage, must be available before any api call
-		let domain = ""; // "https://gettuition.kinde.com/api".split("/api")[0]
-
 		let response = await axios.request({
 			url: path,
 			method,

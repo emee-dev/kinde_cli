@@ -1,3 +1,4 @@
+/** Temporary in-memory storage for config object */
 class Context {
 	private data: any;
 

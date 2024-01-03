@@ -109,13 +109,3 @@ export async function clearGlobalConfig(path: string) {
 		return null;
 	}
 }
-
-/* 
- 1. User asks cli to login 
-
- cli requests for user business domain, client id and client secret
-
- client creates config directory and config file
-
- saving the data user entered into the config file
- */

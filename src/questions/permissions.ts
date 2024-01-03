@@ -42,7 +42,7 @@ class Permission {
 				let noCliArguments = Object.keys(permission).length === 0;
 
 				if (noCliArguments) {
-					let permissionAction = (await select({
+					let prompt = (await select({
 						message: "Proceed with appropriate action",
 						options: [
 							{
@@ -56,13 +56,13 @@ class Permission {
 						],
 					})) as PermissionAction;
 
-					if (permissionAction === "create") {
+					if (prompt === "create") {
 						let createPermission = await this.__createPermissionArguments();
 
 						console.log(createPermission);
 					}
 
-					if (permissionAction === "update") {
+					if (prompt === "update") {
 						let updatePermission = await this.__updatePermissionArguments();
 
 						console.log(updatePermission);
