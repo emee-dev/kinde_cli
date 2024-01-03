@@ -6,9 +6,9 @@ Kinde is an alternative way of doing auth, kind of like clerk but better because
 
 <!-- Find new badges at https://shields.io/badges -->
 
-This CLI all the functionality for Kinde
+This CLI some of the functionality for Kinde:
 
-[x] Authentication & Access Token
+[x] Authentication via Access Token for M2M
 
 - [ ] Users
   - [ ] Refresh User Claim
@@ -22,23 +22,21 @@ This CLI all the functionality for Kinde
   - [x] Create Permission
   - [x] Update Permission
   - [ ] Delete Permission
-- [x] Roles
+- [] Roles
   - [ ] List Roles
-  - [x] Create Roles
-  - [x] Update Roles
+  - [] Create Roles
+  - [] Update Roles
   - [ ] Delete Roles
-
-[![Demo of the Read Me template command line app. It shows the user inputting their GitHub username and a repository name to generate a set of customised files useful for sharing GitHub projects.](demo.gif)](https://raw.githubusercontent.com/Cutwell/readme-template/main/demo.gif)
 
 ## Getting Started
 
 On your Kinde dashboard, create a new application call it CLI for convienience and choose Machine to Machine (M2M) option then click save to continue and then tab on the left click on API(s) then enable the api to connect this application to; copy your domain, client id and client secret you will need this to login.
 
-[Applications view]()
-[Add New M2M Application]()
-[Enable Api]()
-[Click Application Details]()
-[Copy your Details]()
+![Applications view](./temp/applications.png)
+![Add New M2M Application](./temp/add_application.png)
+![Enable Api](./temp/enable_api.png)
+![Click Application Details](./temp/click_details.png)
+![Copy your Details](./temp/copy_details.png)
 
 ### Install the CLI
 
@@ -72,17 +70,20 @@ Manage your permissions
 kinde-cli permission
 ```
 
-Manage your roles
+### Note
 
-```bash
-kinde-cli role
-```
+Not all the features of kinde are currently supported and there maybe a lot of breaking changes.
+
+### Documentation
+
+Kinde api documentation can be found here:
+(Kinde)[https://kinde.com/api/docs]
 
 ## Contributing
 
 <!-- Remember to update the links in the `.github/CONTRIBUTING.md` file from `Cutwell/readme-template` to your own username and repository. -->
 
-For information on how to use Kinde please consult their documentation
+For more information on how to use Kinde please consult their documentation
 
 ## License
 
