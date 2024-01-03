@@ -103,7 +103,7 @@ class Permission {
 			body: () =>
 				text({
 					message: generateMessage({
-						key: "Body:",
+						key: "Body",
 						desc: "Permission's details",
 						attr: "optional",
 					}),
@@ -119,19 +119,19 @@ class Permission {
 				text({
 					message: generateMessage({
 						key: "Id",
-						desc: "permission's id",
+						desc: "Permission's id",
 						attr: "required",
 					}),
 
 					validate(value) {
-						if (!value) return "id is required";
+						if (!value) return "Id is required";
 					},
 				}),
 			key: () =>
 				text({
 					message: generateMessage({
 						key: "Key",
-						desc: "identifier to use in code",
+						desc: "Identifier to use in code",
 						attr: "optional",
 					}),
 					defaultValue: undefined,
@@ -157,7 +157,7 @@ class Permission {
 			body: () =>
 				text({
 					message: generateMessage({
-						key: "Body:",
+						key: "Body",
 						desc: "Permission's details",
 						attr: "optional",
 					}),
