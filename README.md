@@ -32,63 +32,57 @@ This CLI all the functionality for Kinde
 
 ## Getting Started
 
+On your Kinde dashboard, create a new application call it CLI for convienience and choose Machine to Machine (M2M) option then click save to continue and then tab on the left click on API(s) then enable the api to connect this application to; copy your domain, client id and client secret you will need this to login.
+
+[Applications view]()
+[Add New M2M Application]()
+[Enable Api]()
+[Click Application Details]()
+[Copy your Details]()
+
 ### Install the CLI
 
 Available on NPM. To install:
 
 ```bash copy
-npm install kinde-cli
+npm install -g kinde-cli
 ```
 
 ## Usage
 
 ```bash
-kinde-cli [-] [--test] [--force]
+kinde-cli --help
 ```
 
-|      Flag      |                                                      Description                                                      |
-| :------------: | :-------------------------------------------------------------------------------------------------------------------: |
-| `-h`, `--help` |                                           Show this help message and exit.                                            |
-|    `--test`    | Run in test mode - files created have .test extension. This does not update filename references inside the templates. |
-|   `--force`    |                                            Force overwrite existing files.                                            |
-
-## Run locally
-
-### Install dependencies
-
-If using `pip`:
-
-```sh
-pip install -r requirements.txt
-```
-
-If using `poetry`:
-
-```sh
-poetry install --without dev
-```
+|      Flag      |           Description            |
+| :------------: | :------------------------------: |
+| `-h`, `--help` | Show this help message and exit. |
 
 ### Usage
 
 Run the program from the command line (from the project root) like this:
 
-If using `pip`:
-
-```sh
-python3 readme_generator/src/generator.py
+```bash
+kinde-cli login
 ```
 
-If using `poetry`:
+Manage your permissions
 
-```sh
-poetry run readme
+```bash
+kinde-cli permission
+```
+
+Manage your roles
+
+```bash
+kinde-cli role
 ```
 
 ## Contributing
 
 <!-- Remember to update the links in the `.github/CONTRIBUTING.md` file from `Cutwell/readme-template` to your own username and repository. -->
 
-For information on how to set up your dev environment and contribute, see [here](.github/CONTRIBUTING.md).
+For information on how to use Kinde please consult their documentation
 
 ## License
 

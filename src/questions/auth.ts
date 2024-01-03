@@ -1,29 +1,17 @@
-import { group, spinner as clarkSpinner, text } from "@clack/prompts";
+import { spinner as clarkSpinner, group, text } from "@clack/prompts";
 import { Command } from "commander";
 import colors from "picocolors";
 import qs from "qs";
 import { axiosRequest } from "../lib/axios";
+import Context from "../lib/context";
 import { extractUrlWithoutApi, generateMessage } from "../utils/index";
 import {
-	createRootDirectory,
 	isValidPath,
 	rootDirectoryPath,
 	writeGlobalConfig,
 } from "../utils/storage";
-import Context from "../lib/context";
 
 const spinner = clarkSpinner();
-/* 
-/oauth2/token
-client_id: "",
-client_secret: ""
-personaldomain: ""
-
-// Before login request clientSecret
-
- 
-
-*/
 
 let env = process.env.NODE_ENV;
 
@@ -68,8 +56,6 @@ class Authentication {
 				)
 			)
 			.action(async (str, options) => {
-				const args = options.opts() as {};
-
 				let data = await this.__getAuthenticationArguments();
 
 				await this.__generateAccessToken(data);

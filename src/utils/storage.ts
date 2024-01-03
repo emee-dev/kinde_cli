@@ -92,6 +92,24 @@ export async function writeGlobalConfig<T>(data: T) {
 	}
 }
 
+export async function clearGlobalConfig(path: string) {
+	try {
+		let deleted = await new Promise<boolean>((resolve, reject) => {
+			fs.unlink(path, (err) => {
+				if (err) {
+					return reject(false);
+				}
+
+				return resolve(true);
+			});
+		});
+
+		return deleted;
+	} catch (err) {
+		return null;
+	}
+}
+
 /* 
  1. User asks cli to login 
 

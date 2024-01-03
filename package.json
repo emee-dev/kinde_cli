@@ -1,12 +1,19 @@
 {
-	"name": "Kinde Cli",
+	"name": "kinde-cli",
 	"version": "1.0.0",
-	"description": "Kinde cli for managing your business integration",
+	"description": "Kinde cli for managing your business integration, users, roles and permissions etc",
 	"main": "./dist/index.js",
 	"scripts": {
 		"dev": "ts-node-dev --respawn --transpile-only ./src/index.ts",
 		"start": "ts-node ./src/index.ts",
+		"lint": "tsc --noEmit",
 		"build": "tsc"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"bin": {
+		"kinde-cli": "dist/index.js"
 	},
 	"keywords": [
 		"kinde",
@@ -15,7 +22,7 @@
 		"authorization",
 		"auth"
 	],
-	"author": "",
+	"author": "Emmanuel Ajike",
 	"license": "ISC",
 	"dependencies": {
 		"@clack/prompts": "^0.7.0",
