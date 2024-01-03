@@ -12,8 +12,8 @@
 		"forceConsistentCasingInFileNames": true,
 		"resolveJsonModule": true,
 		"outDir": "dist",
-		"noImplicitAny": true
-		// "baseUrl": ".",
+		"noImplicitAny": true,
+		"baseUrl": "."
 		// "paths": {
 		//   "@./*": ["src/*"],
 		//   "@lib/*": ["src/lib/*"],
@@ -21,6 +21,6 @@
 		//   "@utils/*": ["src/utils/*"],
 		// }
 	},
-	"include": ["src/**/*.ts", "src/remove.ts"],
+	"include": ["src/**/*.ts"],
 	"exclude": ["node_modules"]
 }

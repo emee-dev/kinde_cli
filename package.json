@@ -2,18 +2,18 @@
 	"name": "kinde-cli",
 	"version": "1.0.1",
 	"description": "Kinde cli for managing your business integration, users, roles and permissions etc",
-	"main": "./dist/index.js",
+	"main": "./dist/src/index.js",
 	"scripts": {
 		"dev": "ts-node-dev --respawn --transpile-only ./src/index.ts",
 		"start": "ts-node ./src/index.ts",
-		"lint": "tsc --noEmit",
-		"build": "tsc"
+		"lint": "tsc --noEmit ./",
+		"build": "rm -rf dist && tsc"
 	},
 	"publishConfig": {
 		"access": "public"
 	},
 	"bin": {
-		"kinde-cli": "dist/index.js"
+		"kinde-cli": "./dist/src/index.js"
 	},
 	"keywords": [
 		"kinde",
