@@ -41,3 +41,12 @@ export function extractUrlWithoutApi(url: string) {
 		return null;
 	}
 }
+
+export function errorHandler(fn: (...args: any[]) => Promise<any>) {
+	return (...args: any[]) => {
+		throw new Error("Unauthenticated user be gone");
+		return fn(...args).catch((error: Error) => {
+			console.error(error.message);
+		});
+	};
+}

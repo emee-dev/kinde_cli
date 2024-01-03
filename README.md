@@ -70,6 +70,12 @@ Manage your permissions
 kinde-cli permission
 ```
 
+### Todo
+
+- [] Input Validation
+- [] Error Handling
+- [] Request Retry Logic
+
 ### Note
 
 Not all the features of kinde are currently supported and there maybe a lot of breaking changes.

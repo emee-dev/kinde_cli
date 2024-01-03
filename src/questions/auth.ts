@@ -3,7 +3,7 @@ import { Command } from "commander";
 import colors from "picocolors";
 import qs from "qs";
 import { axiosRequest } from "../lib/axios";
-import Context from "../lib/context";
+import ctx from "../lib/context";
 import { extractUrlWithoutApi, generateMessage } from "../utils/index";
 import {
 	isValidPath,
@@ -28,7 +28,7 @@ interface AccessTokenResponse {
 	token_type: string;
 }
 
-interface ConfigData {
+export interface ConfigData {
 	clientId: string;
 	normalDomain: string;
 	personalDomainNoApiEndingPath: string;
@@ -150,7 +150,7 @@ class Authentication {
 		};
 
 		// Hold lifetime data in memory
-		Context.setData(configData);
+		ctx.setData(configData);
 
 		spinner.start("Hold on writing config data...");
 		let configCreated = await writeGlobalConfig<ConfigData>(configData);

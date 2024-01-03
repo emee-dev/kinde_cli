@@ -21,4 +21,6 @@ class Context {
 	}
 }
 
-export default new Context();
+const ctx = new Context();
+
+export default ctx;

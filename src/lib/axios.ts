@@ -4,7 +4,7 @@ interface AxiosRequest {
 	path: string;
 	method: "POST" | "GET" | "PATCH" | "DELETE";
 	headers: {
-		Accept: "application/json";
+		Accept?: "application/json";
 		"Content-Type"?: "application/json" | "application/x-www-form-urlencoded";
 		Authorization?: `Bearer ${string}`;
 	};

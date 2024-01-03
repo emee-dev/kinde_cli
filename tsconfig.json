@@ -13,14 +13,18 @@
 		"resolveJsonModule": true,
 		"outDir": "dist",
 		"noImplicitAny": true,
-		"baseUrl": "."
-		// "paths": {
-		//   "@./*": ["src/*"],
-		//   "@lib/*": ["src/lib/*"],
-		//   "@questions/*": ["src/questions/*"],
-		//   "@utils/*": ["src/utils/*"],
-		// }
+		"baseUrl": "./",
+		"paths": {
+			"@/*": ["./src/*"],
+			"@lib/*": ["./src/lib/*"],
+			"@questions/*": ["./src/questions/*"],
+			"@utils/*": ["./src/utils/*"]
+		}
 	},
-	"include": ["src/**/*.ts"],
-	"exclude": ["node_modules"]
+	"include": ["./src/**/*.ts"],
+	"exclude": ["node_modules"],
+	"ts-node": {
+		// Do not forget to `npm i -D tsconfig-paths`
+		"require": ["tsconfig-paths/register"]
+	}
 }

@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "ts-node-dev --respawn --transpile-only ./src/index.ts",
 		"start": "ts-node ./src/index.ts",
-		"lint": "tsc --noEmit ./",
+		"lint": "tsc --noEmit ./src",
 		"build": "rm -rf dist && tsc"
 	},
 	"publishConfig": {
@@ -47,6 +47,7 @@
 		"inquirer": "^9.2.12",
 		"jsdom": "^23.0.1",
 		"ts-node": "^10.9.2",
-		"ts-node-dev": "^2.0.0"
+		"ts-node-dev": "^2.0.0",
+		"tsconfig-paths": "^4.2.0"
 	}
 }

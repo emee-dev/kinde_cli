@@ -1,7 +1,10 @@
+import { axiosRequest } from "@/lib/axios";
+import ctx from "@/lib/context";
 import { group, select, text } from "@clack/prompts";
 import { Command } from "commander";
 import colors from "picocolors";
-import { generateMessage } from "../utils";
+import { errorHandler, generateMessage } from "../utils";
+import { ConfigData } from "./auth";
 
 type PermissionArgument = {
 	create: "create";
@@ -26,22 +29,22 @@ class Permission {
 					"Manage User Permissions. For more information, refer to: https://kinde.com/docs/user-management/user-permissions/"
 				)
 			)
-			.option(
-				"-c, --create <name>",
-				"create permission",
-				this.__createPermissionArguments
-			)
-			.option(
-				"-u, --update",
-				"update permission",
-				this.__updatePermissionArguments
-			)
-			.option("-d, --delete", "delete permission")
-			.action(async (str, options) => {
-				const permission = options.opts() as PermissionArgument;
-				let noCliArguments = Object.keys(permission).length === 0;
+			// .option(
+			// 	"-c, --create <name>",
+			// 	"create permission",
+			// 	this.__createPermissionArguments
+			// )
+			// .option(
+			// 	"-u, --update",
+			// 	"update permission",
+			// 	this.__updatePermissionArguments
+			// )
+			// .option("-d, --delete", "delete permission")
+			.action(
+				errorHandler(async (str, options) => {
+					const permission = options.opts() as PermissionArgument;
+					// let noCliArguments = Object.keys(permission).length === 0;
 
-				if (noCliArguments) {
 					let prompt = (await select({
 						message: "Proceed with appropriate action",
 						options: [
@@ -57,9 +60,23 @@ class Permission {
 					})) as PermissionAction;
 
 					if (prompt === "create") {
-						let createPermission = await this.__createPermissionArguments();
+						let createPermissionData = await this.__createPermissionArguments();
 
-						console.log(createPermission);
+						let config = ctx.getData() as ConfigData;
+
+						let response = await axiosRequest({
+							path: `${config.normalDomain}/api/v1/permissions`,
+							headers: {
+								Accept: "application/json",
+								"Content-Type": "application/json",
+							},
+							method: "POST",
+							data: createPermissionData,
+						});
+
+						if (!response) throw new Error("");
+
+						console.log(response);
 					}
 
 					if (prompt === "update") {
@@ -67,8 +84,8 @@ class Permission {
 
 						console.log(updatePermission);
 					}
-				}
-			});
+				})
+			);
 	}
 
 	private async __createPermissionArguments() {
