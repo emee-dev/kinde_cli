@@ -1,32 +1,47 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 interface AxiosRequest {
 	path: string;
 	method: "POST" | "GET" | "PATCH" | "DELETE";
 	headers: {
 		Accept?: "application/json";
-		"Content-Type"?: "application/json" | "application/x-www-form-urlencoded";
 		Authorization?: `Bearer ${string}`;
+		"Content-Type"?: "application/json" | "application/x-www-form-urlencoded";
 	};
 	data?: unknown;
 }
 
-export const axiosRequest = async ({
-	path,
-	method,
-	headers,
-	data,
-}: AxiosRequest) => {
+export const axiosRequest = async (args: AxiosRequest) => {
 	try {
-		let response = await axios.request({
+		let { path, method, headers, data } = args;
+
+		let response = await axios({
 			url: path,
 			method,
 			headers,
 			data,
+			validateStatus(status) {
+				return status >= 200 && status < 500;
+			},
 		});
 
-		return response.data;
+		return {
+			data: response.data,
+			status: response.status,
+		};
 	} catch (err: unknown) {
-		return null;
+		if (err instanceof AxiosError) {
+			return {
+				data: null,
+				status: err.status,
+				error: err.toJSON(),
+			};
+		}
+
+		return {
+			data: null,
+			status: 500,
+			error: "Internal Error",
+		};
 	}
 };

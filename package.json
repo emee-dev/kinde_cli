@@ -1,6 +1,6 @@
 {
 	"name": "kinde-cli",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "Kinde cli for managing your business integration, users, roles and permissions etc",
 	"main": "./dist/src/index.js",
 	"scripts": {
@@ -38,7 +38,8 @@
 		"axios": "^1.6.3",
 		"commander": "^11.1.0",
 		"picocolors": "^1.0.0",
-		"qs": "^6.11.2"
+		"qs": "^6.11.2",
+		"zod": "^3.22.4"
 	},
 	"devDependencies": {
 		"@types/inquirer": "^9.0.7",

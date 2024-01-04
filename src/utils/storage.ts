@@ -1,7 +1,16 @@
 import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";
-import { AccessTokenConfig } from "../questions/auth";
+import { AccessTokenConfig, ConfigData } from "../questions/auth";
+
+// export const isValidConfig = (data: string) => {
+// 	try {
+// 		let config = JSON.parse(data);
+// 		return true;
+// 	} catch (e) {
+// 		return false;
+// 	}
+// };
 
 export const rootDirectoryPath = () => {
 	let dirName = ".kinde";
@@ -46,17 +55,17 @@ export async function readGlobalConfig() {
 	try {
 		const configPath = await getGlobalConfigPath();
 
-		let configFile = await new Promise((resolve, reject) => {
+		let configFile = await new Promise<string>((resolve, reject) => {
 			fs.readFile(path.join(configPath), (err, data) => {
 				if (err) {
 					return reject(err);
 				}
 
-				return resolve(data.toString());
+				return resolve(data.toString("utf8"));
 			});
 		});
 
-		return configFile as AccessTokenConfig;
+		return configFile;
 	} catch (err) {
 		return null;
 	}
@@ -65,11 +74,6 @@ export async function readGlobalConfig() {
 export async function writeGlobalConfig<T>(data: T) {
 	try {
 		let rootDirectory = rootDirectoryPath();
-
-		// // Does Directory already exist
-		// if (rootDirectory) {
-		// 	return null;
-		// }
 
 		let config = await new Promise<boolean>((resolve, reject) => {
 			fs.writeFile(
@@ -92,10 +96,12 @@ export async function writeGlobalConfig<T>(data: T) {
 	}
 }
 
-export async function clearGlobalConfig(path: string) {
+export async function clearGlobalConfig() {
 	try {
+		const configPath = await getGlobalConfigPath();
+
 		let deleted = await new Promise<boolean>((resolve, reject) => {
-			fs.unlink(path, (err) => {
+			fs.unlink(configPath, (err) => {
 				if (err) {
 					return reject(false);
 				}

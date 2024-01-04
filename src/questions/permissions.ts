@@ -3,7 +3,7 @@ import ctx from "@/lib/context";
 import { group, select, text } from "@clack/prompts";
 import { Command } from "commander";
 import colors from "picocolors";
-import { errorHandler, generateMessage } from "../utils";
+import { errorHandler, generateMessage, onCancelCallback } from "../utils";
 import { ConfigData } from "./auth";
 
 type PermissionArgument = {
@@ -41,9 +41,8 @@ class Permission {
 			// )
 			// .option("-d, --delete", "delete permission")
 			.action(
-				errorHandler(async (str, options) => {
-					const permission = options.opts() as PermissionArgument;
-					// let noCliArguments = Object.keys(permission).length === 0;
+				errorHandler("Auth", async (str, options) => {
+					let context = ctx.getData() as ConfigData;
 
 					let prompt = (await select({
 						message: "Proceed with appropriate action",
@@ -62,21 +61,27 @@ class Permission {
 					if (prompt === "create") {
 						let createPermissionData = await this.__createPermissionArguments();
 
-						let config = ctx.getData() as ConfigData;
-
 						let response = await axiosRequest({
-							path: `${config.normalDomain}/api/v1/permissions`,
+							path: `${context.normalDomain}/api/v1/permissions`,
+							method: "POST",
+							data: createPermissionData,
 							headers: {
 								Accept: "application/json",
 								"Content-Type": "application/json",
+								Authorization: `Bearer ${context.token.access_token}`,
 							},
-							method: "POST",
-							data: createPermissionData,
 						});
 
-						if (!response) throw new Error("");
+						if (response.error) {
+							console.error(response.error);
+							return;
+						}
 
-						console.log(response);
+						if ("errors" in response.data) {
+							console.warn(JSON.stringify(response.data, null, 2));
+						} else {
+							console.log(JSON.stringify(response.data, null, 2));
+						}
 					}
 
 					if (prompt === "update") {
@@ -89,98 +94,104 @@ class Permission {
 	}
 
 	private async __createPermissionArguments() {
-		let values = await group({
-			key: () =>
-				text({
-					message: generateMessage({
-						key: "Key",
-						desc: "Identifier to use in code",
-						attr: "optional",
+		let values = await group(
+			{
+				key: () =>
+					text({
+						message: generateMessage({
+							key: "Key",
+							desc: "Identifier to use in code eg blog:admin",
+							attr: "optional",
+						}),
+						defaultValue: undefined,
 					}),
-					defaultValue: undefined,
-				}),
-			name: () =>
-				text({
-					message: generateMessage({
-						key: "Name",
-						desc: "Permission's name",
-						attr: "optional",
+				name: () =>
+					text({
+						message: generateMessage({
+							key: "Name",
+							desc: "Permission's name eg blog:admin",
+							attr: "optional",
+						}),
+						defaultValue: undefined,
 					}),
-					defaultValue: undefined,
-				}),
-			description: () =>
-				text({
-					message: generateMessage({
-						key: "Description",
-						desc: "Permission's description",
-						attr: "optional",
+				description: () =>
+					text({
+						message: generateMessage({
+							key: "Description",
+							desc: "Permission's description eg for managing blogs",
+							attr: "optional",
+						}),
+						defaultValue: undefined,
 					}),
-					defaultValue: undefined,
-				}),
-			body: () =>
-				text({
-					message: generateMessage({
-						key: "Body",
-						desc: "Permission's details",
-						attr: "optional",
+				body: () =>
+					text({
+						message: generateMessage({
+							key: "Body",
+							desc: "Permission's details",
+							attr: "optional",
+						}),
+						defaultValue: undefined,
 					}),
-					defaultValue: undefined,
-				}),
-		});
+			},
+			onCancelCallback
+		);
 
 		return values;
 	}
 	private async __updatePermissionArguments() {
-		let values = await group({
-			permissionId: () =>
-				text({
-					message: generateMessage({
-						key: "Id",
-						desc: "Permission's id",
-						attr: "required",
-					}),
+		let values = await group(
+			{
+				permissionId: () =>
+					text({
+						message: generateMessage({
+							key: "Id",
+							desc: "Permission's id",
+							attr: "required",
+						}),
 
-					validate(value) {
-						if (!value) return "Id is required";
-					},
-				}),
-			key: () =>
-				text({
-					message: generateMessage({
-						key: "Key",
-						desc: "Identifier to use in code",
-						attr: "optional",
+						validate(value) {
+							if (!value) return "Id is required";
+						},
 					}),
-					defaultValue: undefined,
-				}),
-			name: () =>
-				text({
-					message: generateMessage({
-						key: "Name",
-						desc: "Permission's name",
-						attr: "optional",
+				key: () =>
+					text({
+						message: generateMessage({
+							key: "Key",
+							desc: "Identifier to use in code",
+							attr: "optional",
+						}),
+						defaultValue: undefined,
 					}),
-					defaultValue: undefined,
-				}),
-			description: () =>
-				text({
-					message: generateMessage({
-						key: "Description",
-						desc: "Permission's description",
-						attr: "optional",
+				name: () =>
+					text({
+						message: generateMessage({
+							key: "Name",
+							desc: "Permission's name",
+							attr: "optional",
+						}),
+						defaultValue: undefined,
 					}),
-					defaultValue: undefined,
-				}),
-			body: () =>
-				text({
-					message: generateMessage({
-						key: "Body",
-						desc: "Permission's details",
-						attr: "optional",
+				description: () =>
+					text({
+						message: generateMessage({
+							key: "Description",
+							desc: "Permission's description",
+							attr: "optional",
+						}),
+						defaultValue: undefined,
 					}),
-					defaultValue: undefined,
-				}),
-		});
+				body: () =>
+					text({
+						message: generateMessage({
+							key: "Body",
+							desc: "Permission's details",
+							attr: "optional",
+						}),
+						defaultValue: undefined,
+					}),
+			},
+			onCancelCallback
+		);
 
 		return values;
 	}

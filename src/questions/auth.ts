@@ -1,15 +1,29 @@
-import { spinner as clarkSpinner, group, text } from "@clack/prompts";
+import {
+	cancel,
+	spinner as clarkSpinner,
+	confirm,
+	group,
+	select,
+	text,
+} from "@clack/prompts";
 import { Command } from "commander";
 import colors from "picocolors";
 import qs from "qs";
 import { axiosRequest } from "../lib/axios";
 import ctx from "../lib/context";
-import { extractUrlWithoutApi, generateMessage } from "../utils/index";
 import {
-	isValidPath,
-	rootDirectoryPath,
+	errorHandler,
+	extractUrlWithoutApi,
+	generateMessage,
+	onCancelCallback,
+} from "../utils/index";
+import {
+	clearGlobalConfig,
+	createRootDirectory,
+	readGlobalConfig,
 	writeGlobalConfig,
 } from "../utils/storage";
+import { z } from "zod";
 
 const spinner = clarkSpinner();
 
@@ -30,14 +44,10 @@ interface AccessTokenResponse {
 
 export interface ConfigData {
 	clientId: string;
+	clientSecret: string;
 	normalDomain: string;
 	personalDomainNoApiEndingPath: string;
-	accessToken: {
-		access_token: string;
-		expires_in: number;
-		scope: string;
-		token_type: string;
-	};
+	token: AccessTokenResponse;
 }
 
 class Authentication {
@@ -55,111 +65,144 @@ class Authentication {
 					"Obtain authentication to use this CLI. Requirements include the Business Domain Client Id and Client Secret. For more information, refer to: https://kinde.com/docs/build/get-access-token-for-connecting-securely-to-kindes-api/"
 				)
 			)
-			.action(async (str, options) => {
-				let data = await this.__getAuthenticationArguments();
-
-				await this.__generateAccessToken(data);
-			});
+			.action(
+				errorHandler("NoAuth", async (str, options) => {
+					await clearGlobalConfig();
+					let data = await this.__getAuthenticationArguments();
+					await this.__generateAccessToken(data);
+				})
+			);
 	}
 
 	private async __getAuthenticationArguments() {
-		let values = await group({
-			domain: () =>
-				text({
-					message: generateMessage({
-						key: "Domain",
-						desc: "Business domain eg: https://<domain>.kinde.com",
-						attr: "required",
+		let values = await group(
+			{
+				domain: () =>
+					text({
+						message: generateMessage({
+							key: "Domain",
+							desc: "Business domain eg: https://<domain>.kinde.com",
+							attr: "required",
+						}),
+						defaultValue: undefined,
+						validate(value) {
+							if (!value) return "Business domain is required!!";
+						},
 					}),
-					defaultValue: undefined,
-					validate(value) {
-						if (!value) return "Business domain is required!!";
-					},
-				}),
-			clientId: () =>
-				text({
-					message: generateMessage({
-						key: "ClientId",
-						desc: "From Settings > Applications > New Application",
-						attr: "required",
+				clientId: () =>
+					text({
+						message: generateMessage({
+							key: "ClientId",
+							desc: "From Settings > Applications > New Application",
+							attr: "required",
+						}),
+						defaultValue: undefined,
+						validate(value) {
+							if (!value) return "Client Id is required!!";
+						},
 					}),
-					defaultValue: undefined,
-					validate(value) {
-						if (!value) return "Client Id is required!!";
-					},
-				}),
-			clientSecret: () =>
-				text({
-					message: generateMessage({
-						key: "ClientSecret",
-						desc: "From Settings > Applications > New Application",
-						attr: "required",
+				clientSecret: () =>
+					text({
+						message: generateMessage({
+							key: "ClientSecret",
+							desc: "From Settings > Applications > New Application",
+							attr: "required",
+						}),
+						defaultValue: undefined,
+						validate(value) {
+							if (!value) return "Client Secret is required!!";
+						},
 					}),
-					defaultValue: undefined,
-					validate(value) {
-						if (!value) return "Client Secret is required!!";
-					},
-				}),
-		});
+			},
+			onCancelCallback
+		);
+
 		return values;
 	}
 
-	private async __generateAccessToken({
-		domain,
-		clientId,
-		clientSecret,
-	}: AccessTokenConfig) {
-		let strippedApiEndpoint = extractUrlWithoutApi(domain);
+	private async __generateAccessToken(args: AccessTokenConfig) {
+		let { domain, clientId, clientSecret } = args;
+
+		let rawInput = z.object({
+			clientId: z.string().min(1),
+			clientSecret: z.string().min(1),
+			domain: z.string().url(),
+		});
+
+		let validation = rawInput.safeParse(args);
+		if (!validation.success) {
+			console.warn(
+				validation.error.errors.map((e) => `Path: [${e.path}] - '${e.message}'`)
+			);
+			throw new Error(
+				"Input Validation Error, please make sure you entered valid data"
+			);
+		}
+
+		let noApiEndingPath = extractUrlWithoutApi(domain);
+
+		if (!noApiEndingPath) {
+			throw new Error(
+				"Please provide a valid kinde domain, go to your dashboard > application to copy it"
+			);
+		}
 
 		// URL Encoded Params
 		let payload = qs.stringify({
 			grant_type: "client_credentials",
 			client_id: clientId,
 			client_secret: clientSecret,
-			audience: strippedApiEndpoint,
+			audience: `${noApiEndingPath}/api`, // I don't understand it very well
 		});
 
-		let doesRootPathExist = isValidPath(rootDirectoryPath());
-
-		if (!doesRootPathExist) {
-			return;
-		}
-
 		spinner.start("Authenticating, please wait...");
-		let accessToken = (await axiosRequest({
-			path: strippedApiEndpoint + "/oauth2/token",
+
+		let accessTokenResponse = await axiosRequest({
+			path: `${noApiEndingPath}/oauth2/token`,
 			method: "POST",
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded",
 				Accept: "application/json",
 			},
 			data: payload,
-		})) as AccessTokenResponse;
+		});
 
-		if (!accessToken) {
-			spinner.stop("Error authenticating user, please try again", 400);
+		if (accessTokenResponse.error) {
+			console.log("Access Token Response", accessTokenResponse.error);
+			spinner.stop(
+				"Error authenticating user, please try again",
+				accessTokenResponse.status
+			);
 			return;
 		}
+
 		spinner.stop("Authentication success, please hold on...");
 
-		let configData = {
+		let configData: ConfigData = {
 			clientId,
+			clientSecret,
 			normalDomain: domain,
-			personalDomainNoApiEndingPath: strippedApiEndpoint as string,
-			accessToken: accessToken,
+			personalDomainNoApiEndingPath: `${noApiEndingPath}/api`,
+			token: accessTokenResponse.data as AccessTokenResponse,
 		};
 
-		// Hold lifetime data in memory
+		// Hold lifetime data in memory for easy access
 		ctx.setData(configData);
 
-		spinner.start("Hold on writing config data...");
-		let configCreated = await writeGlobalConfig<ConfigData>(configData);
-
-		if (!configCreated) {
-			spinner.stop("Config could not be saved", 400);
+		spinner.start("Hold on creating directory...");
+		let rootPath = createRootDirectory();
+		if (!rootPath) {
+			spinner.stop("Failed to create directory", 400);
 			return;
 		}
+		spinner.stop();
 
+		spinner.start("Hold on writing config to directory...");
+		let configCreated = await writeGlobalConfig<ConfigData>(configData);
+		if (!configCreated) {
+			spinner.stop("Falled to write config to directory", 400);
+			return;
+		}
 		spinner.stop("Config was saved sucessfully...");
 	}
 }
