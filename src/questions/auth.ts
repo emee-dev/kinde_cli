@@ -1,17 +1,12 @@
-import {
-	cancel,
-	spinner as clarkSpinner,
-	confirm,
-	group,
-	select,
-	text,
-} from "@clack/prompts";
+import { spinner as clarkSpinner, group, text } from "@clack/prompts";
 import { Command } from "commander";
 import colors from "picocolors";
 import qs from "qs";
+import { z } from "zod";
 import { axiosRequest } from "../lib/axios";
 import ctx from "../lib/context";
 import {
+	Question,
 	errorHandler,
 	extractUrlWithoutApi,
 	generateMessage,
@@ -20,14 +15,11 @@ import {
 import {
 	clearGlobalConfig,
 	createRootDirectory,
-	readGlobalConfig,
 	writeGlobalConfig,
 } from "../utils/storage";
-import { z } from "zod";
+import { prettifyAxios, prettifyZod } from "@/utils/error";
 
 const spinner = clarkSpinner();
-
-let env = process.env.NODE_ENV;
 
 export interface AccessTokenConfig {
 	domain: string;
@@ -49,6 +41,24 @@ export interface ConfigData {
 	personalDomainNoApiEndingPath: string;
 	token: AccessTokenResponse;
 }
+
+const command: Question = {
+	DOMAIN: {
+		identifier: "Domain",
+		desc: "Business domain eg: https://<domain>.kinde.com",
+		attr: "required",
+	},
+	CLIENTID: {
+		identifier: "ClientId",
+		desc: "From Settings > Applications > New Application",
+		attr: "required",
+	},
+	CLIENTSECRET: {
+		identifier: "ClientSecret",
+		desc: "From Settings > Applications > New Application",
+		attr: "required",
+	},
+} as const;
 
 class Authentication {
 	constructor(private program: Command) {
@@ -80,9 +90,9 @@ class Authentication {
 				domain: () =>
 					text({
 						message: generateMessage({
-							key: "Domain",
-							desc: "Business domain eg: https://<domain>.kinde.com",
-							attr: "required",
+							identifier: command.DOMAIN.identifier,
+							desc: command.DOMAIN.desc,
+							attr: command.DOMAIN.attr,
 						}),
 						defaultValue: undefined,
 						validate(value) {
@@ -92,9 +102,9 @@ class Authentication {
 				clientId: () =>
 					text({
 						message: generateMessage({
-							key: "ClientId",
-							desc: "From Settings > Applications > New Application",
-							attr: "required",
+							identifier: command.CLIENTID.identifier,
+							desc: command.CLIENTID.desc,
+							attr: command.CLIENTID.attr,
 						}),
 						defaultValue: undefined,
 						validate(value) {
@@ -104,9 +114,9 @@ class Authentication {
 				clientSecret: () =>
 					text({
 						message: generateMessage({
-							key: "ClientSecret",
-							desc: "From Settings > Applications > New Application",
-							attr: "required",
+							identifier: command.CLIENTSECRET.identifier,
+							desc: command.CLIENTSECRET.desc,
+							attr: command.CLIENTSECRET.attr,
 						}),
 						defaultValue: undefined,
 						validate(value) {
@@ -131,9 +141,7 @@ class Authentication {
 
 		let validation = rawInput.safeParse(args);
 		if (!validation.success) {
-			console.warn(
-				validation.error.errors.map((e) => `Path: [${e.path}] - '${e.message}'`)
-			);
+			prettifyZod(validation);
 			throw new Error(
 				"Input Validation Error, please make sure you entered valid data"
 			);
@@ -152,7 +160,7 @@ class Authentication {
 			grant_type: "client_credentials",
 			client_id: clientId,
 			client_secret: clientSecret,
-			audience: `${noApiEndingPath}/api`, // I don't understand it very well
+			audience: `${noApiEndingPath}/api`,
 		});
 
 		spinner.start("Authenticating, please wait...");
@@ -168,11 +176,11 @@ class Authentication {
 		});
 
 		if (accessTokenResponse.error) {
-			console.log("Access Token Response", accessTokenResponse.error);
 			spinner.stop(
 				"Error authenticating user, please try again",
 				accessTokenResponse.status
 			);
+			prettifyAxios(accessTokenResponse);
 			return;
 		}
 
@@ -185,9 +193,6 @@ class Authentication {
 			personalDomainNoApiEndingPath: `${noApiEndingPath}/api`,
 			token: accessTokenResponse.data as AccessTokenResponse,
 		};
-
-		// Hold lifetime data in memory for easy access
-		ctx.setData(configData);
 
 		spinner.start("Hold on creating directory...");
 		let rootPath = createRootDirectory();

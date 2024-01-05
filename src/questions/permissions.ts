@@ -3,8 +3,43 @@ import ctx from "@/lib/context";
 import { group, select, text } from "@clack/prompts";
 import { Command } from "commander";
 import colors from "picocolors";
-import { errorHandler, generateMessage, onCancelCallback } from "../utils";
+import {
+	Question,
+	errorHandler,
+	generateMessage,
+	omit,
+	onCancelCallback,
+} from "../utils";
 import { ConfigData } from "./auth";
+import { prettifyAxios } from "@/utils/error";
+
+const command: Question = {
+	ID: {
+		identifier: "Id",
+		desc: "Permission's id",
+		attr: "required",
+	},
+	KEY: {
+		identifier: "Key",
+		desc: "Identifier to use in code eg blog:admin",
+		attr: "optional",
+	},
+	NAME: {
+		identifier: "Name",
+		desc: "Permission's name eg blog:admin",
+		attr: "optional",
+	},
+	DESCRIPTION: {
+		identifier: "Description",
+		desc: "Permission's description eg for managing blogs",
+		attr: "optional",
+	},
+	BODY: {
+		identifier: "Body",
+		desc: "Permission's details",
+		attr: "optional",
+	},
+} as const;
 
 type PermissionArgument = {
 	create: "create";
@@ -32,12 +67,12 @@ class Permission {
 			// .option(
 			// 	"-c, --create <name>",
 			// 	"create permission",
-			// 	this.__createPermissionArguments
+			// 	this.__createPermissionPrompts
 			// )
 			// .option(
 			// 	"-u, --update",
 			// 	"update permission",
-			// 	this.__updatePermissionArguments
+			// 	this.__updatePermissionPrompts
 			// )
 			// .option("-d, --delete", "delete permission")
 			.action(
@@ -59,7 +94,7 @@ class Permission {
 					})) as PermissionAction;
 
 					if (prompt === "create") {
-						let createPermissionData = await this.__createPermissionArguments();
+						let createPermissionData = await this.__createPermissionPrompts();
 
 						let response = await axiosRequest({
 							path: `${context.normalDomain}/api/v1/permissions`,
@@ -72,63 +107,65 @@ class Permission {
 							},
 						});
 
-						if (response.error) {
-							console.error(response.error);
-							return;
-						}
-
-						if ("errors" in response.data) {
-							console.warn(JSON.stringify(response.data, null, 2));
-						} else {
-							console.log(JSON.stringify(response.data, null, 2));
-						}
+						return prettifyAxios(response);
 					}
 
 					if (prompt === "update") {
-						let updatePermission = await this.__updatePermissionArguments();
+						let updatePermission = await this.__updatePermissionPrompts();
 
-						console.log(updatePermission);
+						let response = await axiosRequest({
+							path: `${context.normalDomain}/api/v1/permissions/${updatePermission.permissionId}`,
+							method: "PATCH",
+							data: omit("permissionId", updatePermission),
+							headers: {
+								Accept: "application/json",
+								"Content-Type": "application/json",
+								Authorization: `Bearer ${context.token.access_token}`,
+							},
+						});
+
+						return prettifyAxios(response);
 					}
 				})
 			);
 	}
 
-	private async __createPermissionArguments() {
+	private async __createPermissionPrompts() {
 		let values = await group(
 			{
 				key: () =>
 					text({
 						message: generateMessage({
-							key: "Key",
-							desc: "Identifier to use in code eg blog:admin",
-							attr: "optional",
+							identifier: command.KEY.identifier,
+							desc: command.KEY.desc,
+							attr: command.KEY.attr,
 						}),
 						defaultValue: undefined,
 					}),
 				name: () =>
 					text({
 						message: generateMessage({
-							key: "Name",
-							desc: "Permission's name eg blog:admin",
-							attr: "optional",
+							identifier: command.NAME.identifier,
+							desc: command.NAME.desc,
+							attr: command.NAME.attr,
 						}),
 						defaultValue: undefined,
 					}),
 				description: () =>
 					text({
 						message: generateMessage({
-							key: "Description",
-							desc: "Permission's description eg for managing blogs",
-							attr: "optional",
+							identifier: command.DESCRIPTION.identifier,
+							desc: command.DESCRIPTION.desc,
+							attr: command.DESCRIPTION.attr,
 						}),
 						defaultValue: undefined,
 					}),
 				body: () =>
 					text({
 						message: generateMessage({
-							key: "Body",
-							desc: "Permission's details",
-							attr: "optional",
+							identifier: command.BODY.identifier,
+							desc: command.BODY.desc,
+							attr: command.BODY.attr,
 						}),
 						defaultValue: undefined,
 					}),
@@ -138,17 +175,16 @@ class Permission {
 
 		return values;
 	}
-	private async __updatePermissionArguments() {
+	private async __updatePermissionPrompts() {
 		let values = await group(
 			{
 				permissionId: () =>
 					text({
 						message: generateMessage({
-							key: "Id",
-							desc: "Permission's id",
-							attr: "required",
+							identifier: command.ID.identifier,
+							desc: command.ID.desc,
+							attr: command.ID.attr,
 						}),
-
 						validate(value) {
 							if (!value) return "Id is required";
 						},
@@ -156,36 +192,36 @@ class Permission {
 				key: () =>
 					text({
 						message: generateMessage({
-							key: "Key",
-							desc: "Identifier to use in code",
-							attr: "optional",
+							identifier: command.KEY.identifier,
+							desc: command.KEY.desc,
+							attr: command.KEY.attr,
 						}),
 						defaultValue: undefined,
 					}),
 				name: () =>
 					text({
 						message: generateMessage({
-							key: "Name",
-							desc: "Permission's name",
-							attr: "optional",
+							identifier: command.NAME.identifier,
+							desc: command.NAME.desc,
+							attr: command.NAME.attr,
 						}),
 						defaultValue: undefined,
 					}),
 				description: () =>
 					text({
 						message: generateMessage({
-							key: "Description",
-							desc: "Permission's description",
-							attr: "optional",
+							identifier: command.DESCRIPTION.identifier,
+							desc: command.DESCRIPTION.desc,
+							attr: command.DESCRIPTION.attr,
 						}),
 						defaultValue: undefined,
 					}),
 				body: () =>
 					text({
 						message: generateMessage({
-							key: "Body",
-							desc: "Permission's details",
-							attr: "optional",
+							identifier: command.BODY.identifier,
+							desc: command.BODY.desc,
+							attr: command.BODY.attr,
 						}),
 						defaultValue: undefined,
 					}),

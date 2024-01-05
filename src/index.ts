@@ -6,10 +6,7 @@ import Authentication from "./questions/auth";
 import Permission from "./questions/permissions";
 import { createRootDirectory } from "./utils/storage";
 
-// // intro(`Kinde Auth, easy drop in auth for your needs`);
-// // outro(`You're all set!`);
-
-createRootDirectory(); /* .then((d) => console.log("Root Directory Created at:", d)); */
+createRootDirectory();
 const program = new Command();
 
 program

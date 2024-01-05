@@ -58,16 +58,24 @@ kinde-cli --help
 
 ### Usage
 
-Run the program from the command line (from the project root) like this:
+Run the program from the command line like this:
+
+- To use this CLI make sure you are authenticated by calling `npx kinde-cli login`
 
 ```bash
 kinde-cli login
 ```
 
-Manage your permissions
+- Manage your permissions
 
 ```bash
 kinde-cli permission
+```
+
+- Can be used with npx as well
+
+```bash
+npx kinde-cli permission
 ```
 
 ### Todo

@@ -25,23 +25,37 @@ export const axiosRequest = async (args: AxiosRequest) => {
 			},
 		});
 
-		return {
-			data: response.data,
-			status: response.status,
-		};
-	} catch (err: unknown) {
-		if (err instanceof AxiosError) {
-			return {
+		if ([400, 403, 429].includes(response.status)) {
+			throw {
 				data: null,
-				status: err.status,
-				error: err.toJSON(),
+				name: "SERVER",
+				status: response.status,
+				error: response.data.errors,
 			};
 		}
 
 		return {
-			data: null,
-			status: 500,
-			error: "Internal Error",
+			data: response.data,
+			status: response.status,
+			error: null,
+		};
+	} catch (err: unknown) {
+		// TODO refactor later am losing context on server error responses
+		// find a way to properly handle request errors and server error response
+		if (err instanceof AxiosError) {
+			return {
+				data: null,
+				name: "AXIOS",
+				status: err.status,
+				error: err.message,
+			};
+		}
+
+		return err as {
+			data: null;
+			name: "SERVER";
+			status: number;
+			error: any;
 		};
 	}
 };

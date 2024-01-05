@@ -1,7 +1,6 @@
 import fs from "node:fs";
-import path from "node:path";
 import os from "node:os";
-import { AccessTokenConfig, ConfigData } from "../questions/auth";
+import path from "node:path";
 
 // export const isValidConfig = (data: string) => {
 // 	try {

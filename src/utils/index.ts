@@ -1,14 +1,18 @@
 import ctx from "@/lib/context";
-import colors from "picocolors";
-import { readGlobalConfig } from "./storage";
-import { z } from "zod";
 import { cancel } from "@clack/prompts";
+import colors from "picocolors";
+import { z } from "zod";
+import { readGlobalConfig } from "./storage";
 
 interface GenerateMessage {
-	key: `${string}`;
-	desc: `${string}`;
+	identifier: string;
+	desc: string;
 	attr: "optional" | "required";
 }
+
+export type Question = {
+	[index: string]: GenerateMessage;
+};
 
 export const onCancelCallback = {
 	onCancel: ({ results }: { results: any }) => {
@@ -17,20 +21,13 @@ export const onCancelCallback = {
 	},
 };
 
-export const removeOptionalNullProperties = (obj: Record<string, unknown>) => {
-	let temp = {} as typeof obj;
-	for (let property in obj) {
-		let key = property as keyof typeof obj;
-		if (obj[key] && obj[key] !== undefined) {
-			temp[key] = obj[key];
-		}
-	}
-
-	return temp;
+export const omit = <T = Record<string, unknown>>(key: keyof T, obj: T) => {
+	const { [key]: omitted, ...rest } = obj;
+	return rest;
 };
 
-export const generateMessage = ({ key, desc, attr }: GenerateMessage) =>
-	`${colors.green(`${key}:`)} ${colors.blue(`(${desc})`)} ${colors.green(
+export const generateMessage = ({ identifier, desc, attr }: GenerateMessage) =>
+	`${colors.green(`${identifier}:`)} ${colors.blue(`(${desc})`)} ${colors.green(
 		`[${attr}]`
 	)}`;
 
