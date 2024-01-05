@@ -1,10 +1,10 @@
+import { prettifyAxios, prettifyZod } from "@/utils/error";
 import { spinner as clarkSpinner, group, text } from "@clack/prompts";
 import { Command } from "commander";
 import colors from "picocolors";
 import qs from "qs";
 import { z } from "zod";
 import { axiosRequest } from "../lib/axios";
-import ctx from "../lib/context";
 import {
 	Question,
 	errorHandler,
@@ -17,7 +17,6 @@ import {
 	createRootDirectory,
 	writeGlobalConfig,
 } from "../utils/storage";
-import { prettifyAxios, prettifyZod } from "@/utils/error";
 
 const spinner = clarkSpinner();
 
@@ -78,13 +77,13 @@ class Authentication {
 			.action(
 				errorHandler("NoAuth", async (str, options) => {
 					await clearGlobalConfig();
-					let data = await this.__getAuthenticationArguments();
+					let data = await this.__getAuthenticationPrompt();
 					await this.__generateAccessToken(data);
 				})
 			);
 	}
 
-	private async __getAuthenticationArguments() {
+	private async __getAuthenticationPrompt() {
 		let values = await group(
 			{
 				domain: () =>

@@ -8,7 +8,7 @@ Kinde is an alternative way of doing auth, kind of like clerk but better because
 
 This CLI some of the functionality for Kinde:
 
-[x] Authentication via Access Token for M2M
+- [x] Authentication via Access Token for M2M
 
 - [ ] Users
   - [ ] Refresh User Claim
@@ -22,10 +22,10 @@ This CLI some of the functionality for Kinde:
   - [x] Create Permission
   - [x] Update Permission
   - [ ] Delete Permission
-- [] Roles
+- [ ] Roles
   - [ ] List Roles
-  - [] Create Roles
-  - [] Update Roles
+  - [ ] Create Roles
+  - [ ] Update Roles
   - [ ] Delete Roles
 
 ## Getting Started
