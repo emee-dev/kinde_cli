@@ -102,7 +102,7 @@ export function errorHandler(
 	return async (...args: any[]) => {
 		/**
 		 * Some command action handlers do not require auth,
-		 * But this auth check should run all at all times
+		 * But this auth check should run all at all times if handler is Auth
 		 */
 		if (handler === "Auth") {
 			try {

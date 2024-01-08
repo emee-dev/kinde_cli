@@ -80,9 +80,9 @@ npx kinde-cli permission
 
 ### Todo
 
-- [] Input Validation
-- [] Error Handling
-- [] Request Retry Logic
+- [ ] Input Validation
+- [ ] Error Handling
+- [ ] Request Retry Logic
 
 ### Note
 
