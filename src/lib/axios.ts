@@ -1,4 +1,5 @@
 import axios, { AxiosError } from "axios";
+import axiosRetry from "axios-retry";
 
 interface AxiosRequest {
 	path: string;
@@ -11,9 +12,45 @@ interface AxiosRequest {
 	data?: unknown;
 }
 
+export interface RequestError {
+	data: null;
+	name: "SERVER" | "AXIOS";
+	status: number;
+	error: any;
+}
+
 export const axiosRequest = async (args: AxiosRequest) => {
 	try {
 		let { path, method, headers, data } = args;
+
+		let RETRIES = 3;
+		let DELAY = 3000;
+
+		axiosRetry(axios, {
+			retries: RETRIES,
+			retryDelay: (...arg) => axiosRetry.exponentialDelay(...arg, DELAY),
+			retryCondition(error: AxiosError) {
+				switch (error?.response?.status) {
+					case 429:
+						return true;
+					case 500:
+						return true;
+					case 501:
+						return true;
+					default:
+						return false;
+				}
+			},
+			onRetry: (retryCount, error, request) => {
+				console.warn(
+					`WARN ${request.method?.toUpperCase()} ${request.url} ${
+						error.code
+					} (${error.message}). Will retry in ${DELAY / 1000} seconds. ${
+						RETRIES - retryCount
+					} retries left.`
+				);
+			},
+		});
 
 		let response = await axios({
 			url: path,
@@ -40,8 +77,6 @@ export const axiosRequest = async (args: AxiosRequest) => {
 			error: null,
 		};
 	} catch (err: unknown) {
-		// TODO refactor later am losing context on server error responses
-		// find a way to properly handle request errors and server error response
 		if (err instanceof AxiosError) {
 			return {
 				data: null,
