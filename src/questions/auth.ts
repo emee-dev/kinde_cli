@@ -78,7 +78,7 @@ class Authentication {
 				errorHandler("NoAuth", async (str, options) => {
 					await clearGlobalConfig();
 					let data = await this.__getAuthenticationPrompt();
-					await this.__generateAccessToken(data);
+					await this.generateAccessToken(data);
 				})
 			);
 	}
@@ -129,7 +129,7 @@ class Authentication {
 		return values;
 	}
 
-	private async __generateAccessToken(args: AccessTokenConfig) {
+	private async generateAccessToken(args: AccessTokenConfig) {
 		let { domain, clientId, clientSecret } = args;
 
 		let rawInput = z.object({
