@@ -6,6 +6,10 @@ on:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   build:
     name: Build Packages
@@ -13,22 +17,19 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: pnpm/action-setup@v2
+        with:
+          version: 7
       - uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 16.x
           cache: "pnpm"
 
-      - name: Install Dependencies
-        run: pnpm i
-
-      - run: pnpm run build
-      - run: pnpm changeset status
-
-        # - name: Create Release Pull Request or Publish to npm
-        #   uses: changesets/action@master
-
-        #   with:
-        #     publish: pnpm release
+      - run: pnpm install --frozen-lockfile
+      - name: Create Release Pull Request or Publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          publish: pnpm run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -9,7 +9,7 @@
 		"lint": "tsc --noEmit",
 		"build": "rm -rf dist && tsc && tsc-alias",
 		"changeset": "changeset",
-		"release": "changeset publish"
+		"release": "pnpm run build && changeset publish"
 	},
 	"publishConfig": {
 		"access": "public"
