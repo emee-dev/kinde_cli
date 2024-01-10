@@ -1,6 +1,6 @@
 {
 	"name": "kinde-cli",
-	"version": "1.1.0",
+	"version": "1.2.0",
 	"description": "Kinde cli for managing your business integration, users, roles and permissions etc",
 	"main": "./dist/src/index.js",
 	"scripts": {
