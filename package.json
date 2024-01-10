@@ -57,5 +57,6 @@
 		"ts-node-dev": "^2.0.0",
 		"tsc-alias": "^1.8.8",
 		"tsconfig-paths": "^4.2.0"
-	}
+	},
+	"packageManager": "pnpm@8.9.2"
 }
