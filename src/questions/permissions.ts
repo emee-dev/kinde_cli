@@ -90,6 +90,10 @@ class Permission {
 								label: "Update Permission",
 								value: "update",
 							},
+							{
+								label: "Delete Permission",
+								value: "delete",
+							},
 						],
 					})) as PermissionAction;
 
@@ -117,6 +121,22 @@ class Permission {
 							path: `${context.normalDomain}/api/v1/permissions/${updatePermission.permissionId}`,
 							method: "PATCH",
 							data: omit("permissionId", updatePermission),
+							headers: {
+								Accept: "application/json",
+								"Content-Type": "application/json",
+								Authorization: `Bearer ${context.token.access_token}`,
+							},
+						});
+
+						return prettifyAxios(response);
+					}
+
+					if (prompt === "delete") {
+						let deletePermission = await this.__deletePermissionPrompts();
+
+						let response = await axiosRequest({
+							path: `${context.normalDomain}/api/v1/permissions/${deletePermission.permissionId}`,
+							method: "DELETE",
 							headers: {
 								Accept: "application/json",
 								"Content-Type": "application/json",
@@ -224,6 +244,26 @@ class Permission {
 							attr: command.BODY.attr,
 						}),
 						defaultValue: undefined,
+					}),
+			},
+			onCancelCallback
+		);
+
+		return values;
+	}
+	private async __deletePermissionPrompts() {
+		let values = await group(
+			{
+				permissionId: () =>
+					text({
+						message: generateMessage({
+							identifier: command.ID.identifier,
+							desc: command.ID.desc,
+							attr: command.ID.attr,
+						}),
+						validate(value) {
+							if (!value) return "Id is required";
+						},
 					}),
 			},
 			onCancelCallback
