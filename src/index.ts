@@ -4,6 +4,7 @@ import { Command } from "commander";
 import packageJson from "../package.json";
 import Authentication from "./questions/auth";
 import Permission from "./questions/permissions";
+import Role from "./questions/roles";
 import { createRootDirectory } from "./utils/storage";
 
 createRootDirectory();
@@ -17,6 +18,7 @@ program
 
 new Authentication(program);
 new Permission(program);
+new Role(program);
 
 try {
 	program.parse(process.argv);
