@@ -13,7 +13,7 @@ import {
 import { ConfigData } from "./auth";
 import { prettifyAxios } from "@/utils/error";
 
-const command: Question = {
+const command: Question<"ID" | "KEY" | "NAME" | "DESCRIPTION" | "BODY"> = {
 	ID: {
 		identifier: "Id",
 		desc: "Permission's id",
