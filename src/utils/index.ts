@@ -10,8 +10,8 @@ interface GenerateMessage {
 	attr: "optional" | "required";
 }
 
-export type Question = {
-	[index: string]: GenerateMessage;
+export type Question<T extends string> = {
+	[index in T]: GenerateMessage;
 };
 
 export const onCancelCallback = {

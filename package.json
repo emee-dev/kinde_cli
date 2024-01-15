@@ -1,6 +1,6 @@
 {
 	"name": "kinde-cli",
-	"version": "1.1.0",
+	"version": "1.3.0",
 	"description": "Kinde cli for managing your business integration, users, roles and permissions etc",
 	"main": "./dist/src/index.js",
 	"scripts": {
@@ -9,7 +9,7 @@
 		"lint": "tsc --noEmit",
 		"build": "rm -rf dist && tsc && tsc-alias",
 		"changeset": "changeset",
-		"release": "changeset publish"
+		"ci:release": "pnpm run lint && pnpm run build && changeset publish"
 	},
 	"publishConfig": {
 		"access": "public"
@@ -37,8 +37,10 @@
 	"license": "ISC",
 	"dependencies": {
 		"@clack/prompts": "^0.7.0",
+		"ansi-escapes": "^6.2.0",
 		"axios": "^1.6.3",
 		"axios-retry": "^4.0.0",
+		"binancelatest": "npm:binance@2.9.0",
 		"commander": "^11.1.0",
 		"picocolors": "^1.0.0",
 		"qs": "^6.11.2",
@@ -50,12 +52,11 @@
 		"@types/inquirer": "^9.0.7",
 		"@types/jsdom": "^21.1.6",
 		"@types/qs": "^6.9.11",
-		"concurrently": "^8.2.2",
 		"inquirer": "^9.2.12",
-		"jsdom": "^23.0.1",
 		"ts-node": "^10.9.2",
 		"ts-node-dev": "^2.0.0",
 		"tsc-alias": "^1.8.8",
 		"tsconfig-paths": "^4.2.0"
-	}
+	},
+	"packageManager": "pnpm@8.9.2"
 }

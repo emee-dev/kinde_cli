@@ -24,9 +24,9 @@ This CLI some of the functionality for Kinde:
   - [ ] Delete Permission
 - [ ] Roles
   - [ ] List Roles
-  - [ ] Create Roles
-  - [ ] Update Roles
-  - [ ] Delete Roles
+  - [x] Create Roles
+  - [x] Update Roles
+  - [x] Delete Roles
 
 ## Getting Started
 
@@ -82,7 +82,7 @@ npx kinde-cli permission
 
 - [ ] Input Validation
 - [ ] Error Handling
-- [ ] Request Retry Logic
+- [x] Request Retry Logic
 
 ### Note
 

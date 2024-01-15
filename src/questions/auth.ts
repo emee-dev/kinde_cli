@@ -41,7 +41,7 @@ export interface ConfigData {
 	token: AccessTokenResponse;
 }
 
-const command: Question = {
+const command: Question<"DOMAIN" | "CLIENTID" | "CLIENTSECRET"> = {
 	DOMAIN: {
 		identifier: "Domain",
 		desc: "Business domain eg: https://<domain>.kinde.com",
