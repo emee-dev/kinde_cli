@@ -1,5 +1,19 @@
 # kinde-cli
 
+## 1.4.0
+
+### Minor Changes
+
+- [#11](https://github.com/emee-dev/kinde_cli/pull/11) [`3cb038a`](https://github.com/emee-dev/kinde_cli/commit/3cb038a6c3befe0ffe8ffe80c36937a065590c91) Thanks [@emee-dev](https://github.com/emee-dev)! - Added:
+
+  - added the feature for listing your business details and also updating your business details
+
+  usage:
+
+  - kinde-cli business
+
+  then follow the prompts
+
 ## 1.3.0
 
 ### Minor Changes
