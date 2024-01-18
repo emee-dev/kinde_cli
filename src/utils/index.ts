@@ -14,6 +14,18 @@ export type Question<T extends string> = {
 	[index in T]: GenerateMessage;
 };
 
+/** Remove keys whose values are undefined */
+export function filterUndefined(obj: Record<string, unknown>) {
+	let temp = {} as any;
+	for (let key in obj) {
+		if (obj[key] && obj[key] !== null) {
+			temp[key] = obj[key];
+		}
+	}
+
+	return temp;
+}
+
 export const onCancelCallback = {
 	onCancel: ({ results }: { results: any }) => {
 		cancel("Done.");

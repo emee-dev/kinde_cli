@@ -27,6 +27,9 @@ This CLI some of the functionality for Kinde:
   - [x] Create Roles
   - [x] Update Roles
   - [x] Delete Roles
+- [x] Business
+  - [x] List Business details
+  - [x] Update Business details
 
 ## Getting Started
 

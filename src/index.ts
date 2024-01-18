@@ -5,6 +5,7 @@ import packageJson from "../package.json";
 import Authentication from "./questions/auth";
 import Permission from "./questions/permissions";
 import Role from "./questions/roles";
+import Business from "./questions/business";
 import { createRootDirectory } from "./utils/storage";
 
 createRootDirectory();
@@ -19,6 +20,7 @@ program
 new Authentication(program);
 new Permission(program);
 new Role(program);
+new Business(program);
 
 try {
 	program.parse(process.argv);
