@@ -40,7 +40,6 @@
 		"ansi-escapes": "^6.2.0",
 		"axios": "^1.6.3",
 		"axios-retry": "^4.0.0",
-		"binancelatest": "npm:binance@2.9.0",
 		"commander": "^11.1.0",
 		"picocolors": "^1.0.0",
 		"qs": "^6.11.2",
